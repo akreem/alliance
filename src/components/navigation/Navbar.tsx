@@ -14,10 +14,10 @@ interface NavbarProps {
 const Navbar = ({
   logo = "Alliance Immobilier",
   menuItems = [
-    { label: "Home", href: "#" },
+    { label: "Home", href: "/" },
     { label: "Properties", href: "#" },
     { label: "About", href: "#" },
-    { label: "Contact", href: "#" },
+    { label: "Contact", href: "/contact" },
   ],
 }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
