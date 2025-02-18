@@ -12,7 +12,7 @@ interface NavbarProps {
 }
 
 const Navbar = ({
-  logo = "Luxury Estates",
+  logo = "Alliance Immobilier",
   menuItems = [
     { label: "Home", href: "#" },
     { label: "Properties", href: "#" },
