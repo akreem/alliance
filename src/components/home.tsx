@@ -36,9 +36,12 @@ const Home = () => {
           <p className="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
             Contact our team of luxury real estate experts to begin your journey
           </p>
-          <button className="bg-white text-gray-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition-colors">
+          <a
+            href="/contact"
+            className="inline-block bg-white text-gray-900 px-8 py-3 rounded-md font-semibold hover:bg-gray-100 transition-colors"
+          >
             Contact Us
-          </button>
+          </a>
         </div>
       </motion.section>
 
@@ -46,7 +49,7 @@ const Home = () => {
       <footer className="bg-gray-50 py-12 px-4">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">Luxury Estates</h3>
+            <h3 className="text-xl font-bold mb-4">Alliance Immobilier</h3>
             <p className="text-gray-600">
               Your premier destination for luxury real estate
             </p>
@@ -80,7 +83,7 @@ const Home = () => {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-200 text-center text-gray-600">
-          <p>&copy; 2024 Luxury Estates. All rights reserved.</p>
+          <p>&copy; 2024 Alliance Immobilier. All rights reserved.</p>
         </div>
       </footer>
     </div>

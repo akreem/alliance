@@ -12,11 +12,11 @@ interface NavbarProps {
 }
 
 const Navbar = ({
-  logo = "Luxury Estates",
+  logo = "Alliance Immobilier",
   menuItems = [
     { label: "Home", href: "/" },
-    { label: "Properties", href: "#" },
-    { label: "About", href: "#" },
+    { label: "Properties", href: "/properties" },
+    { label: "About", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],
 }: NavbarProps) => {
@@ -35,10 +35,18 @@ const Navbar = ({
   return (
     <nav
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white",
+        "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         {
-          "bg-transparent": !isScrolled && !isMobileMenuOpen,
-          "shadow-md": isScrolled || isMobileMenuOpen,
+          "bg-transparent":
+            !isScrolled &&
+            !isMobileMenuOpen &&
+            (window.location.pathname === "/" ||
+              window.location.pathname === "/about"),
+          "bg-white shadow-md":
+            isScrolled ||
+            isMobileMenuOpen ||
+            (window.location.pathname !== "/" &&
+              window.location.pathname !== "/about"),
         },
       )}
     >
@@ -48,8 +56,16 @@ const Navbar = ({
           <a
             href="#"
             className={cn("text-2xl font-bold", {
-              "text-white": !isScrolled && !isMobileMenuOpen,
-              "text-gray-900": isScrolled || isMobileMenuOpen,
+              "text-white":
+                !isScrolled &&
+                !isMobileMenuOpen &&
+                (window.location.pathname === "/" ||
+                  window.location.pathname === "/about"),
+              "text-gray-900":
+                isScrolled ||
+                isMobileMenuOpen ||
+                (window.location.pathname !== "/" &&
+                  window.location.pathname !== "/about"),
             })}
           >
             {logo}
@@ -64,8 +80,16 @@ const Navbar = ({
                 className={cn(
                   "text-sm font-medium transition-colors duration-300 hover:text-gray-600",
                   {
-                    "text-white": !isScrolled && !isMobileMenuOpen,
-                    "text-gray-900": isScrolled || isMobileMenuOpen,
+                    "text-white":
+                      !isScrolled &&
+                      !isMobileMenuOpen &&
+                      (window.location.pathname === "/" ||
+                        window.location.pathname === "/about"),
+                    "text-gray-900":
+                      isScrolled ||
+                      isMobileMenuOpen ||
+                      (window.location.pathname !== "/" &&
+                        window.location.pathname !== "/about"),
                   },
                 )}
               >
@@ -83,8 +107,16 @@ const Navbar = ({
           >
             <Menu
               className={cn("h-6 w-6", {
-                "text-white": !isScrolled && !isMobileMenuOpen,
-                "text-gray-900": isScrolled || isMobileMenuOpen,
+                "text-white":
+                  !isScrolled &&
+                  !isMobileMenuOpen &&
+                  (window.location.pathname === "/" ||
+                    window.location.pathname === "/about"),
+                "text-gray-900":
+                  isScrolled ||
+                  isMobileMenuOpen ||
+                  (window.location.pathname !== "/" &&
+                    window.location.pathname !== "/about"),
               })}
             />
           </Button>
