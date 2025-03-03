@@ -20,15 +20,15 @@ services:
       - api
 
   # Production service
-  prod:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    restart: unless-stopped
-    depends_on:
-      - api
+  #prod:
+    #build:
+      #context: .
+      #dockerfile: Dockerfile
+    #ports:
+      #- "80:80"
+    #restart: unless-stopped
+    #depends_on:
+      #- api
 
   # API service
   api:
