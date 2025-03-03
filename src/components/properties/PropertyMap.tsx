@@ -137,7 +137,7 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
                 <p class="text-xs font-bold text-primary">${location.price}</p>
                 <p class="text-xs text-gray-500 mt-1">${location.type}</p>
               </div>
-              <a href="/property/${location.id}" class="text-xs bg-primary text-white px-3 py-1 rounded-md mt-2 block text-center hover:bg-primary/90 transition-colors">عرض التفاصيل</a>
+              <a href="/property/${location.id}" class="text-xs bg-primary text-white px-3 py-1 rounded-md mt-2 block text-center hover:bg-primary/90 transition-colors">Plus de détails</a>
             </div>
           `);
 
