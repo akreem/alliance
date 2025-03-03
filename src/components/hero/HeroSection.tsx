@@ -9,8 +9,8 @@ interface HeroSectionProps {
 
 const HeroSection = ({
   backgroundImage = "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2053&q=80",
-  title = "Luxury Living Redefined",
-  subtitle = "Discover Exceptional Properties in Prime Locations",
+  title = "Le luxe de vivre redéfini",
+  subtitle = "Découvrez des propriétés exceptionnelles dans des emplacements de choix",
 }: HeroSectionProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const { scrollY } = useScroll();

@@ -116,7 +116,7 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
           closeButton: false,
           closeOnClick: false,
         }).setHTML(`
-            <div class="p-3 min-w-[220px]" dir="rtl">
+            <div class="p-3 min-w-[220px]">
               <div class="mb-2 rounded-md overflow-hidden">
                 <img src="https://images.unsplash.com/photo-${
                   location.id === "1"
@@ -131,11 +131,13 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
                 }" 
                      alt="${location.name}" class="w-full h-32 object-cover">
               </div>
-              <h3 class="font-semibold text-sm mb-1">${location.name}</h3>
-              <p class="text-xs text-gray-600 mb-1">${location.location}</p>
-              <p class="text-xs font-bold text-primary">${location.price}</p>
-              <p class="text-xs text-gray-500 mt-1">${location.type}</p>
-              <a href="/properties/${location.id}" class="text-xs bg-primary text-white px-3 py-1 rounded-md mt-2 inline-block hover:bg-primary/90 transition-colors">عرض التفاصيل</a>
+              <div style="text-align: right; direction: rtl;">
+                <h3 class="font-semibold text-sm mb-1">${location.name}</h3>
+                <p class="text-xs text-gray-600 mb-1">${location.location}</p>
+                <p class="text-xs font-bold text-primary">${location.price}</p>
+                <p class="text-xs text-gray-500 mt-1">${location.type}</p>
+              </div>
+              <a href="/property/${location.id}" class="text-xs bg-primary text-white px-3 py-1 rounded-md mt-2 block text-center hover:bg-primary/90 transition-colors">عرض التفاصيل</a>
             </div>
           `);
 
@@ -148,7 +150,15 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
           .setPopup(popup)
           .addTo(map.current!);
 
-        // Show popup on click
+        // Show popup on hover and click
+        markerEl.addEventListener("mouseenter", () => {
+          // Close all other popups first
+          Object.values(popupRefs.current).forEach((p) => p.remove());
+          // Show this popup
+          popup.addTo(map.current!);
+        });
+
+        // Keep popup open on click
         markerEl.addEventListener("click", () => {
           // Close all other popups first
           Object.values(popupRefs.current).forEach((p) => p.remove());
@@ -218,7 +228,7 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
                 }
               }}
             >
-              <Link to={`/properties/${location.id}`} className="block">
+              <Link to={`/property/${location.id}`} className="block">
                 <div className="flex items-center mb-2">
                   <MapPin className="h-5 w-5 text-primary mr-2" />
                   <h3 className="font-semibold">{location.location}</h3>
@@ -240,6 +250,10 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
       <style jsx>{`
         .custom-marker {
           cursor: pointer;
+          transition: transform 0.2s;
+        }
+        .custom-marker:hover {
+          transform: scale(1.2);
         }
         .marker-pin {
           width: 24px;
@@ -268,13 +282,7 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
           box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           font-family: "Arial", sans-serif;
         }
-        .mapboxgl-popup-content h3,
-        .mapboxgl-popup-content p {
-          text-align: right;
-        }
         .mapboxgl-popup-content a {
-          display: block;
-          text-align: center;
           font-family: "Arial", sans-serif;
         }
       `}</style>

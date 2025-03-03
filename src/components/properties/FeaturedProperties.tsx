@@ -67,11 +67,11 @@ const FeaturedProperties = ({
           className="text-center mb-16"
         >
           <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            Featured Properties
+            Propriétés en vedette
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our handpicked selection of luxury properties in the most
-            desirable locations
+            Découvrez notre sélection de propriétés de luxe dans les
+            emplacements les plus recherchés
           </p>
         </motion.div>
 
@@ -89,6 +89,7 @@ const FeaturedProperties = ({
               transition={{ duration: 0.6, delay: index * 0.1 }}
             >
               <PropertyCard
+                id={property.id}
                 image={property.image}
                 title={property.title}
                 price={property.price}

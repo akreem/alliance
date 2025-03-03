@@ -14,9 +14,9 @@ interface NavbarProps {
 const Navbar = ({
   logo = "Alliance Immobilier",
   menuItems = [
-    { label: "Home", href: "/" },
-    { label: "Properties", href: "/properties" },
-    { label: "About", href: "/about" },
+    { label: "Accueil", href: "/" },
+    { label: "Propriétés", href: "/properties" },
+    { label: "À propos", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],
 }: NavbarProps) => {
@@ -54,7 +54,7 @@ const Navbar = ({
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <a
-            href="#"
+            href="/"
             className={cn("text-2xl font-bold", {
               "text-white":
                 !isScrolled &&
@@ -67,6 +67,10 @@ const Navbar = ({
                 (window.location.pathname !== "/" &&
                   window.location.pathname !== "/about"),
             })}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = "/";
+            }}
           >
             {logo}
           </a>
