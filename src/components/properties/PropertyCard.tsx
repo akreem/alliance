@@ -32,7 +32,7 @@ const PropertyCard = ({
 }: PropertyCardProps) => {
   return (
     <Card className="w-[380px] h-[480px] overflow-hidden group bg-white transition-all duration-300 hover:shadow-xl">
-      <Link to={`/properties/${id}`} className="block">
+      <Link to={`/property/${id}`} className="block">
         <div className="relative w-full h-[280px] overflow-hidden">
           <img
             src={image}
@@ -59,7 +59,7 @@ const PropertyCard = ({
       </Link>
       <CardContent className="p-6">
         <Link
-          to={`/properties/${id}`}
+          to={`/property/${id}`}
           className="block hover:text-primary transition-colors"
         >
           <h3 className="text-xl font-semibold mb-2">{title}</h3>
@@ -67,9 +67,9 @@ const PropertyCard = ({
         </Link>
       </CardContent>
       <CardFooter className="px-6 py-4 border-t flex justify-between text-sm text-gray-600">
-        <span>{beds} Beds</span>
-        <span>{baths} Baths</span>
-        <span>{sqft.toLocaleString()} Sq Ft</span>
+        <span>{beds} Chambres</span>
+        <span>{baths} Salles de bain</span>
+        <span>{sqft.toLocaleString()} m²</span>
       </CardFooter>
     </Card>
   );
