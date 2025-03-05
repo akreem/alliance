@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import PropertyCard from "./PropertyCard";
 import { Input } from "../ui/input";
@@ -8,111 +8,24 @@ import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import Navbar from "../navigation/Navbar";
 import PropertyMap from "./PropertyMap";
-
-interface Property {
-  id: string;
-  image: string;
-  title: string;
-  price: string;
-  priceValue: number;
-  location: string;
-  beds: number;
-  baths: number;
-  sqft: number;
-  isFavorite: boolean;
-  type: string;
-}
-
-const properties: Property[] = [
-  {
-    id: "1",
-    image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9",
-    title: "Luxury Villa in Sidi Bou Said",
-    price: "1,200,000 TND",
-    priceValue: 1200000,
-    location: "Sidi Bou Said, Tunis",
-    beds: 4,
-    baths: 3,
-    sqft: 3500,
-    isFavorite: false,
-    type: "Villa",
-  },
-  {
-    id: "2",
-    image: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c",
-    title: "Modern Downtown Apartment",
-    price: "850,000 TND",
-    priceValue: 850000,
-    location: "Les Berges du Lac, Tunis",
-    beds: 3,
-    baths: 2,
-    sqft: 2800,
-    isFavorite: true,
-    type: "Apartment",
-  },
-  {
-    id: "3",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
-    title: "Elegant Beachfront Estate",
-    price: "2,100,000 TND",
-    priceValue: 2100000,
-    location: "Hammamet, Tunisia",
-    beds: 5,
-    baths: 4,
-    sqft: 4200,
-    isFavorite: false,
-    type: "Estate",
-  },
-  {
-    id: "4",
-    image: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde",
-    title: "Waterfront Modern Villa",
-    price: "1,800,000 TND",
-    priceValue: 1800000,
-    location: "Gammarth, Tunis",
-    beds: 6,
-    baths: 5,
-    sqft: 5500,
-    isFavorite: false,
-    type: "Villa",
-  },
-  {
-    id: "5",
-    image: "https://images.unsplash.com/photo-1600566753376-12c8ab8e17a9",
-    title: "Contemporary Home in Carthage",
-    price: "950,000 TND",
-    priceValue: 950000,
-    location: "Carthage, Tunis",
-    beds: 4,
-    baths: 4,
-    sqft: 3800,
-    isFavorite: false,
-    type: "House",
-  },
-  {
-    id: "6",
-    image: "https://images.unsplash.com/photo-1600573472550-8090b5e0745e",
-    title: "Luxury Condo with Sea View",
-    price: "750,000 TND",
-    priceValue: 750000,
-    location: "La Marsa, Tunis",
-    beds: 2,
-    baths: 2,
-    sqft: 1800,
-    isFavorite: false,
-    type: "Condo",
-  },
-];
+import { useProperties } from "./useProperties";
+import { Property } from "@/services/api";
 
 const PropertiesPage = () => {
+  const { properties, loading, error, handleToggleFavorite } = useProperties();
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState([500000, 2000000]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [minBeds, setMinBeds] = useState(0);
+  const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
 
-  const propertyTypes = [
-    ...new Set(properties.map((property) => property.type)),
-  ];
+  useEffect(() => {
+    if (properties.length > 0) {
+      setPropertyTypes([
+        ...new Set(properties.map((property) => property.type)),
+      ]);
+    }
+  }, [properties]);
 
   const filteredProperties = properties.filter((property) => {
     // Search term filter
@@ -238,7 +151,15 @@ const PropertiesPage = () => {
         </div>
 
         {/* Results */}
-        {filteredProperties.length > 0 ? (
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <p className="text-xl">Loading properties...</p>
+          </div>
+        ) : error ? (
+          <div className="flex justify-center items-center h-64">
+            <p className="text-xl text-red-500">{error}</p>
+          </div>
+        ) : filteredProperties.length > 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -262,9 +183,7 @@ const PropertiesPage = () => {
                   baths={property.baths}
                   sqft={property.sqft}
                   isFavorite={property.isFavorite}
-                  onFavoriteClick={() =>
-                    console.log(`Toggled favorite for property ${property.id}`)
-                  }
+                  onFavoriteClick={() => handleToggleFavorite(property.id)}
                 />
               </motion.div>
             ))}
