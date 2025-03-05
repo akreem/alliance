@@ -8,6 +8,7 @@ class Property(models.Model):
         ('House', 'House'),
         ('Condo', 'Condo'),
         ('Estate', 'Estate'),
+        ('Land', 'Land'),
     ]
     
     title = models.CharField(max_length=255)

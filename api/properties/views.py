@@ -2,14 +2,16 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Property
-from .serializers import PropertyListSerializer, PropertyDetailSerializer
+from .serializers import PropertyListSerializer, PropertyDetailSerializer, PropertyCreateSerializer
 
-class PropertyViewSet(viewsets.ReadOnlyModelViewSet):
+class PropertyViewSet(viewsets.ModelViewSet):
     queryset = Property.objects.all()
     
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return PropertyDetailSerializer
+        elif self.action in ['create', 'update', 'partial_update']:  # Handle creation & updates
+            return PropertyCreateSerializer
         return PropertyListSerializer
     
     @action(detail=True, methods=['post'])

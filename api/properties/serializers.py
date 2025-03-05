@@ -16,12 +16,19 @@ class AgentSerializer(serializers.ModelSerializer):
         model = Agent
         fields = ['name', 'phone', 'email', 'image_url']
 
+
+class PropertyCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Property
+        fields = '__all__'  # Or specify fields manually if needed
+
+
 class PropertyListSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
     
     class Meta:
         model = Property
-        fields = ['id', 'title', 'price', 'priceValue', 'location', 'beds', 'baths', 'sqft', 'type', 'isFavorite', 'image']
+        fields = ['id', 'title', 'price', 'price_value', 'location', 'beds', 'baths', 'sqft', 'type', 'is_favorite', 'image']
     
     def get_image(self, obj):
         primary_image = obj.images.filter(is_primary=True).first()
@@ -31,8 +38,8 @@ class PropertyListSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['priceValue'] = instance.price_value
-        representation['isFavorite'] = instance.is_favorite
+        representation['price_value'] = instance.price_value
+        representation['is_favorite'] = instance.is_favorite
         return representation
 
 class PropertyDetailSerializer(serializers.ModelSerializer):
@@ -42,7 +49,7 @@ class PropertyDetailSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Property
-        fields = ['id', 'title', 'price', 'location', 'beds', 'baths', 'sqft', 'type', 'description', 'lat', 'lng', 'isFavorite', 'features', 'images', 'agent']
+        fields = ['id', 'title', 'price', 'location', 'beds', 'baths', 'sqft', 'type', 'description', 'lat', 'lng', 'is_favorite', 'features', 'images', 'agent']
     
     def get_features(self, obj):
         features = obj.features.all()
@@ -65,5 +72,5 @@ class PropertyDetailSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         representation = super().to_representation(instance)
-        representation['isFavorite'] = instance.is_favorite
+        representation['is_favorite'] = instance.is_favorite
         return representation
