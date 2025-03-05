@@ -84,7 +84,7 @@ const Home = () => {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-200 text-center text-gray-600">
-          <p>&copy; 2024 Alliance Immobilier. Tous droits réservés.</p>
+          <p>&copy; 2025 Alliance Immobilier. Tous droits réservés.</p>
         </div>
       </footer>
     </div>
