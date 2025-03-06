@@ -4,10 +4,13 @@ import { Button } from "../ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import PropertyList from "./PropertyList";
 import PropertyForm from "./PropertyForm";
+import { User } from "lucide-react";
+import { getCurrentUser } from "@/utils/auth";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("properties");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,6 +20,12 @@ const AdminDashboard = () => {
       navigate("/admin/login");
     } else {
       setIsAuthenticated(true);
+      
+      // Get username from localStorage
+      const user = getCurrentUser();
+      if (user && user.username) {
+        setUsername(user.username);
+      }
     }
   }, [navigate]);
 
@@ -39,9 +48,15 @@ const AdminDashboard = () => {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-          <Button variant="outline" onClick={handleLogout}>
-            Logout
-          </Button>
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center text-gray-700">
+              <User className="h-4 w-4 mr-2" />
+              <span className="font-medium">{username}</span>
+            </div>
+            <Button variant="outline" onClick={handleLogout}>
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
