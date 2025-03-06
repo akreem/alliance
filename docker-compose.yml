@@ -20,19 +20,19 @@ services:
       - api
 
   # Production service
-  prod:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-      - "443:443"
-    restart: unless-stopped
-    volumes:
-      - ./certbot-ssl:/var/www/certbot  # For temporary ACME challenges
-      - /etc/letsencrypt:/etc/letsencrypt  # For SSL certificates
-    depends_on:
-      - api
+  #prod:
+    #build:
+      #context: .
+      #dockerfile: Dockerfile
+    #ports:
+      #- "80:80"
+      #- "443:443"
+    #restart: unless-stopped
+    #volumes:
+      #- ./certbot-ssl:/var/www/certbot  # For temporary ACME challenges
+      #- /etc/letsencrypt:/etc/letsencrypt  # For SSL certificates
+    #depends_on:
+      #- api
 
   # API service
   api:
@@ -56,14 +56,14 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_datav0:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=realestatedb
 
-volumes:
-  postgres_datav0:
+#volumes:
+  #postgres_data:
 
 networks:
   default:
