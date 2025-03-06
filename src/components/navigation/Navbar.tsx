@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { Menu } from "lucide-react";
+import { Menu, LogOut } from "lucide-react";
+import { isAuthenticated, logout } from "@/utils/auth";
 
 interface NavbarProps {
   logo?: string;
@@ -22,15 +23,24 @@ const Navbar = ({
 }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 0);
     };
 
+    // Check authentication status
+    setUserAuthenticated(isAuthenticated());
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    setUserAuthenticated(false);
+  };
 
   return (
     <nav
@@ -101,26 +111,49 @@ const Navbar = ({
               </a>
             ))}
 
-            <a
-              href="/auth"
-              className={cn(
-                "text-sm font-medium transition-colors duration-300 hover:text-gray-600 ml-8",
-                {
-                  "text-white":
-                    !isScrolled &&
-                    !isMobileMenuOpen &&
-                    (window.location.pathname === "/" ||
-                      window.location.pathname === "/about"),
-                  "text-gray-900":
-                    isScrolled ||
-                    isMobileMenuOpen ||
-                    (window.location.pathname !== "/" &&
-                      window.location.pathname !== "/about"),
-                },
-              )}
-            >
-              Login / Sign Up
-            </a>
+            {userAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className={cn(
+                  "text-sm font-medium transition-colors duration-300 hover:text-gray-600 ml-8 flex items-center",
+                  {
+                    "text-white":
+                      !isScrolled &&
+                      !isMobileMenuOpen &&
+                      (window.location.pathname === "/" ||
+                        window.location.pathname === "/about"),
+                    "text-gray-900":
+                      isScrolled ||
+                      isMobileMenuOpen ||
+                      (window.location.pathname !== "/" &&
+                        window.location.pathname !== "/about"),
+                  },
+                )}
+              >
+                <LogOut className="h-4 w-4 mr-1" /> Logout
+              </button>
+            ) : (
+              <a
+                href="/auth"
+                className={cn(
+                  "text-sm font-medium transition-colors duration-300 hover:text-gray-600 ml-8",
+                  {
+                    "text-white":
+                      !isScrolled &&
+                      !isMobileMenuOpen &&
+                      (window.location.pathname === "/" ||
+                        window.location.pathname === "/about"),
+                    "text-gray-900":
+                      isScrolled ||
+                      isMobileMenuOpen ||
+                      (window.location.pathname !== "/" &&
+                        window.location.pathname !== "/about"),
+                  },
+                )}
+              >
+                Login / Sign Up
+              </a>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -160,6 +193,23 @@ const Navbar = ({
                 {item.label}
               </a>
             ))}
+            
+            {userAuthenticated ? (
+              <button
+                onClick={handleLogout}
+                className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left flex items-center"
+              >
+                <LogOut className="h-4 w-4 mr-1" /> Logout
+              </button>
+            ) : (
+              <a
+                href="/auth"
+                className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Login / Sign Up
+              </a>
+            )}
           </div>
         )}
       </div>
