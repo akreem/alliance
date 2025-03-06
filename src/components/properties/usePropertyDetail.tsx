@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { getProperty, toggleFavorite, Property } from "@/services/api";
+import {
+  getProperty,
+  toggleFavorite,
+  Property,
+  getProperties,
+} from "@/services/api";
 
 export const usePropertyDetail = (id: string) => {
   const [property, setProperty] = useState<Property | null>(null);
@@ -9,9 +14,31 @@ export const usePropertyDetail = (id: string) => {
   const fetchProperty = async () => {
     setLoading(true);
     try {
+      // Check if we have property data from a direct API call
+      if (window.propertyData && window.propertyData.id.toString() === id) {
+        setProperty(window.propertyData);
+        window.propertyData = null;
+        setError(null);
+        setLoading(false);
+        return;
+      }
+
+      // Try to get property from the API
       const data = await getProperty(id);
-      setProperty(data);
-      setError(null);
+      if (data) {
+        setProperty(data);
+        setError(null);
+      } else {
+        // If property not found, try to get it from the properties list
+        const allProperties = await getProperties();
+        const foundProperty = allProperties.find((p) => p.id.toString() === id);
+        if (foundProperty) {
+          setProperty(foundProperty);
+          setError(null);
+        } else {
+          setError(`Failed to fetch property ${id}`);
+        }
+      }
     } catch (err) {
       setError(`Failed to fetch property ${id}`);
       console.error(err);

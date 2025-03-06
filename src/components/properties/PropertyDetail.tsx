@@ -16,6 +16,7 @@ import { Button } from "../ui/button";
 import Navbar from "../navigation/Navbar";
 import { Badge } from "../ui/badge";
 import { usePropertyDetail } from "./usePropertyDetail";
+import { getProperties } from "@/services/api";
 import { Property } from "@/services/api";
 
 const PropertyDetail = () => {
@@ -23,6 +24,28 @@ const PropertyDetail = () => {
   const { property, loading, error, handleToggleFavorite } = usePropertyDetail(
     id || "",
   );
+
+  // Fallback to API data if property not found
+  React.useEffect(() => {
+    if (error && id) {
+      const fetchDirectFromAPI = async () => {
+        try {
+          const allProperties = await getProperties();
+          const foundProperty = allProperties.find(
+            (p) => p.id.toString() === id,
+          );
+          if (foundProperty) {
+            // Manually set the property data
+            window.propertyData = foundProperty;
+            window.location.reload();
+          }
+        } catch (err) {
+          console.error("Error fetching property from API:", err);
+        }
+      };
+      fetchDirectFromAPI();
+    }
+  }, [error, id]);
 
   if (loading) {
     return (
