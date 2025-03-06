@@ -93,10 +93,10 @@ const PropertiesPage = () => {
               <Label className="mb-2 block">Price Range</Label>
               <div className="pt-4">
                 <Slider
-                  defaultValue={[5000, 2000000]}
+                  defaultValue={[5000, 3000000]}
                   max={3000000}
                   min={5000}
-                  step={5000}
+                  step={1000}
                   value={priceRange}
                   onValueChange={setPriceRange}
                 />
