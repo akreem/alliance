@@ -6,6 +6,7 @@ import PropertyList from "./PropertyList";
 import PropertyForm from "./PropertyForm";
 import { User } from "lucide-react";
 import { getCurrentUser } from "@/utils/auth";
+import { logAuthState, setMockAuthData } from "@/utils/testAuth";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("properties");
@@ -14,17 +15,44 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Log current auth state for debugging
+    logAuthState();
+    
     // Check if user is authenticated
     const token = localStorage.getItem("authToken");
     if (!token) {
+      console.log("No auth token found, redirecting to login");
       navigate("/admin/login");
     } else {
       setIsAuthenticated(true);
       
       // Get username from localStorage
       const user = getCurrentUser();
+      console.log("Current user:", user); // Debug log
+      
       if (user && user.username) {
+        console.log("Setting username:", user.username); // Debug log
         setUsername(user.username);
+      } else {
+        console.log("No username found in user object"); // Debug log
+        // Fallback to manually parsing localStorage
+        try {
+          const userStr = localStorage.getItem("user");
+          if (userStr) {
+            const userObj = JSON.parse(userStr);
+            console.log("Manually parsed user:", userObj); // Debug log
+            if (userObj && userObj.username) {
+              setUsername(userObj.username);
+            } else {
+              // If still no username, use a default
+              setUsername("Admin User");
+            }
+          }
+        } catch (error) {
+          console.error("Error parsing user from localStorage:", error);
+          // Set a default username as fallback
+          setUsername("Admin User");
+        }
       }
     }
   }, [navigate]);
@@ -33,6 +61,12 @@ const AdminDashboard = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
     navigate("/admin/login");
+  };
+
+  // For testing: set mock auth data
+  const handleSetMockData = () => {
+    setMockAuthData();
+    window.location.reload();
   };
 
   if (!isAuthenticated) {
@@ -51,7 +85,7 @@ const AdminDashboard = () => {
           <div className="flex items-center space-x-4">
             <div className="flex items-center text-gray-700">
               <User className="h-4 w-4 mr-2" />
-              <span className="font-medium">{username}</span>
+              <span className="font-medium">{username || "Admin User"}</span>
             </div>
             <Button variant="outline" onClick={handleLogout}>
               Logout
@@ -69,6 +103,7 @@ const AdminDashboard = () => {
           <TabsList className="mb-8">
             <TabsTrigger value="properties">Properties</TabsTrigger>
             <TabsTrigger value="add-property">Add Property</TabsTrigger>
+            <TabsTrigger value="debug">Debug</TabsTrigger>
           </TabsList>
 
           <TabsContent value="properties">
@@ -77,6 +112,19 @@ const AdminDashboard = () => {
 
           <TabsContent value="add-property">
             <PropertyForm onSuccess={() => setActiveTab("properties")} />
+          </TabsContent>
+          
+          <TabsContent value="debug">
+            <div className="bg-white p-6 rounded-lg shadow">
+              <h2 className="text-xl font-semibold mb-4">Debug Tools</h2>
+              <div className="space-y-4">
+                <div>
+                  <p className="mb-2">Current username: <strong>{username || "Not set"}</strong></p>
+                  <p className="mb-2">Authentication status: <strong>{isAuthenticated ? "Authenticated" : "Not authenticated"}</strong></p>
+                </div>
+                <Button onClick={handleSetMockData}>Set Mock Auth Data</Button>
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
       </main>
