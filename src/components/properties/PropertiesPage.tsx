@@ -14,7 +14,7 @@ import { Property } from "@/services/api";
 const PropertiesPage = () => {
   const { properties, loading, error, handleToggleFavorite } = useProperties();
   const [searchTerm, setSearchTerm] = useState("");
-  const [priceRange, setPriceRange] = useState([5000, 2000000]);
+  const [priceRange, setPriceRange] = useState([5000, 950000]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [minBeds, setMinBeds] = useState(0);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
@@ -93,8 +93,8 @@ const PropertiesPage = () => {
               <Label className="mb-2 block">Price Range</Label>
               <div className="pt-4">
                 <Slider
-                  defaultValue={[5000, 3000000]}
-                  max={3000000}
+                  defaultValue={[5000, 950000]}
+                  max={950000}
                   min={5000}
                   step={1000}
                   value={priceRange}
