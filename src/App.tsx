@@ -12,6 +12,9 @@ import {
   PropertyDetails4,
   PropertyDetails5,
 } from "./components/properties/PropertyDetails";
+import AdminLogin from "./components/admin/AdminLogin";
+import AdminDashboard from "./components/admin/AdminDashboard";
+import AuthPage from "./components/auth/AuthPage";
 import Navbar from "./components/navigation/Navbar";
 import routes from "tempo-routes";
 
@@ -19,7 +22,9 @@ function App() {
   return (
     <Suspense fallback={<p>Loading...</p>}>
       <div>
-        {window.location.pathname !== "/" && <Navbar />}
+        {window.location.pathname !== "/" &&
+          !window.location.pathname.startsWith("/admin") &&
+          !window.location.pathname.startsWith("/auth") && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<ContactPage />} />
@@ -31,6 +36,9 @@ function App() {
           <Route path="/property/3" element={<PropertyDetails3 />} />
           <Route path="/property/4" element={<PropertyDetails4 />} />
           <Route path="/property/5" element={<PropertyDetails5 />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/auth" element={<AuthPage />} />
         </Routes>
         {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
       </div>

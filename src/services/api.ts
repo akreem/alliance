@@ -14,15 +14,17 @@ export interface Property {
   type: string;
   description?: string;
   features?: string[];
-  agent?: {
-    name: string;
-    phone: string;
-    email: string;
-    image: string;
-  };
+  agent?: Agent;
   images?: string[];
   lat?: number;
   lng?: number;
+}
+
+export interface Agent {
+  name: string;
+  phone: string;
+  email: string;
+  image: string;
 }
 
 export interface User {
@@ -42,7 +44,7 @@ export interface ContactForm {
 // Properties API
 export const getProperties = async (): Promise<Property[]> => {
   try {
-    const response = await fetch(`${API_URL}/properties`);
+    const response = await fetch(`${API_URL}/properties/`);
     if (!response.ok) {
       throw new Error("Failed to fetch properties");
     }
@@ -55,7 +57,7 @@ export const getProperties = async (): Promise<Property[]> => {
 
 export const getProperty = async (id: string): Promise<Property | null> => {
   try {
-    const response = await fetch(`${API_URL}/properties/${id}`);
+    const response = await fetch(`${API_URL}/properties/${id}/`);
     if (!response.ok) {
       throw new Error("Failed to fetch property");
     }
@@ -70,7 +72,7 @@ export const toggleFavorite = async (
   id: string,
 ): Promise<{ id: string; isFavorite: boolean } | null> => {
   try {
-    const response = await fetch(`${API_URL}/properties/${id}/favorite`, {
+    const response = await fetch(`${API_URL}/properties/${id}/favorite/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -86,6 +88,103 @@ export const toggleFavorite = async (
   }
 };
 
+export const createProperty = async (
+  propertyData: Partial<Property>,
+): Promise<Property | null> => {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await fetch(`${API_URL}/properties/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(propertyData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to create property");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating property:", error);
+    return null;
+  }
+};
+
+export const updateProperty = async (
+  id: string,
+  propertyData: Partial<Property>,
+): Promise<Property | null> => {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await fetch(`${API_URL}/properties/${id}/`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(propertyData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to update property");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(`Error updating property ${id}:`, error);
+    return null;
+  }
+};
+
+export const deleteProperty = async (id: string): Promise<boolean> => {
+  try {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      throw new Error("Authentication required");
+    }
+
+    const response = await fetch(`${API_URL}/properties/${id}/`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete property");
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`Error deleting property ${id}:`, error);
+    return false;
+  }
+};
+
+export const getAgents = async (): Promise<Agent[]> => {
+  try {
+    const response = await fetch(`${API_URL}/agents/`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch agents");
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching agents:", error);
+    return [];
+  }
+};
+
 // Authentication API
 export const registerUser = async (
   username: string,
@@ -93,7 +192,7 @@ export const registerUser = async (
   password: string,
 ): Promise<User | null> => {
   try {
-    const response = await fetch(`${API_URL}/auth/register`, {
+    const response = await fetch(`${API_URL}/auth/register/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -115,7 +214,7 @@ export const loginUser = async (
   password: string,
 ): Promise<User | null> => {
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL}/auth/login/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -137,7 +236,7 @@ export const submitContactForm = async (
   formData: ContactForm,
 ): Promise<{ success: boolean; message: string } | null> => {
   try {
-    const response = await fetch(`${API_URL}/contact`, {
+    const response = await fetch(`${API_URL}/contact/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

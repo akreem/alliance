@@ -100,6 +100,27 @@ const Navbar = ({
                 {item.label}
               </a>
             ))}
+
+            <a
+              href="/auth"
+              className={cn(
+                "text-sm font-medium transition-colors duration-300 hover:text-gray-600 ml-8",
+                {
+                  "text-white":
+                    !isScrolled &&
+                    !isMobileMenuOpen &&
+                    (window.location.pathname === "/" ||
+                      window.location.pathname === "/about"),
+                  "text-gray-900":
+                    isScrolled ||
+                    isMobileMenuOpen ||
+                    (window.location.pathname !== "/" &&
+                      window.location.pathname !== "/about"),
+                },
+              )}
+            >
+              Login / Sign Up
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
