@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { Menu, LogOut } from "lucide-react";
-import { isAuthenticated, logout } from "@/utils/auth";
+import { Menu, LogOut, User } from "lucide-react";
+import { isAuthenticated, getCurrentUser, logout } from "@/utils/auth";
 
 interface NavbarProps {
   logo?: string;
@@ -24,6 +24,7 @@ const Navbar = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [userAuthenticated, setUserAuthenticated] = useState(false);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,7 +32,16 @@ const Navbar = ({
     };
 
     // Check authentication status
-    setUserAuthenticated(isAuthenticated());
+    const authStatus = isAuthenticated();
+    setUserAuthenticated(authStatus);
+    
+    // Get username if authenticated
+    if (authStatus) {
+      const user = getCurrentUser();
+      if (user && user.username) {
+        setUsername(user.username);
+      }
+    }
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -40,6 +50,7 @@ const Navbar = ({
   const handleLogout = () => {
     logout();
     setUserAuthenticated(false);
+    setUsername("");
   };
 
   return (
@@ -112,26 +123,47 @@ const Navbar = ({
             ))}
 
             {userAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className={cn(
-                  "text-sm font-medium transition-colors duration-300 hover:text-gray-600 ml-8 flex items-center",
-                  {
-                    "text-white":
-                      !isScrolled &&
-                      !isMobileMenuOpen &&
-                      (window.location.pathname === "/" ||
-                        window.location.pathname === "/about"),
-                    "text-gray-900":
-                      isScrolled ||
-                      isMobileMenuOpen ||
-                      (window.location.pathname !== "/" &&
-                        window.location.pathname !== "/about"),
-                  },
-                )}
-              >
-                <LogOut className="h-4 w-4 mr-1" /> Logout
-              </button>
+              <div className="flex items-center space-x-4">
+                <div
+                  className={cn(
+                    "text-sm font-medium flex items-center",
+                    {
+                      "text-white":
+                        !isScrolled &&
+                        !isMobileMenuOpen &&
+                        (window.location.pathname === "/" ||
+                          window.location.pathname === "/about"),
+                      "text-gray-900":
+                        isScrolled ||
+                        isMobileMenuOpen ||
+                        (window.location.pathname !== "/" &&
+                          window.location.pathname !== "/about"),
+                    },
+                  )}
+                >
+                  <User className="h-4 w-4 mr-1" /> {username}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className={cn(
+                    "text-sm font-medium transition-colors duration-300 hover:text-gray-600 flex items-center",
+                    {
+                      "text-white":
+                        !isScrolled &&
+                        !isMobileMenuOpen &&
+                        (window.location.pathname === "/" ||
+                          window.location.pathname === "/about"),
+                      "text-gray-900":
+                        isScrolled ||
+                        isMobileMenuOpen ||
+                        (window.location.pathname !== "/" &&
+                          window.location.pathname !== "/about"),
+                    },
+                  )}
+                >
+                  <LogOut className="h-4 w-4 mr-1" /> Logout
+                </button>
+              </div>
             ) : (
               <a
                 href="/auth"
@@ -195,12 +227,17 @@ const Navbar = ({
             ))}
             
             {userAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left flex items-center"
-              >
-                <LogOut className="h-4 w-4 mr-1" /> Logout
-              </button>
+              <>
+                <div className="block py-2 text-gray-900 text-sm font-medium flex items-center">
+                  <User className="h-4 w-4 mr-1" /> {username}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left flex items-center"
+                >
+                  <LogOut className="h-4 w-4 mr-1" /> Logout
+                </button>
+              </>
             ) : (
               <a
                 href="/auth"
