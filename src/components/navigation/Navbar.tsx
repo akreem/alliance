@@ -35,6 +35,7 @@ const Navbar = ({
     { label: "Propriétés", href: "/properties" },
     { label: "À propos", href: "/about" },
     { label: "Contact", href: "/contact" },
+    { label: "Administration", href: "/admin/dashboard" },
   ],
 }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -143,29 +144,38 @@ const Navbar = ({
 
             {/* Desktop Menu */}
             <div className="hidden md:flex space-x-8">
-              {menuItems.map((item, index) => (
-                <a
-                  key={index}
-                  href={item.href}
-                  className={cn(
-                    "text-sm font-medium transition-colors duration-300 hover:text-gray-600",
-                    {
-                      "text-white":
-                        !isScrolled &&
-                        !isMobileMenuOpen &&
-                        (window.location.pathname === "/" ||
-                          window.location.pathname === "/about"),
-                      "text-gray-900 dark:text-white":
-                        isScrolled ||
-                        isMobileMenuOpen ||
-                        (window.location.pathname !== "/" &&
-                          window.location.pathname !== "/about"),
-                    },
-                  )}
-                >
-                  {item.label}
-                </a>
-              ))}
+              {menuItems.map((item, index) => {
+                // Only show Admin link if user is staff
+                if (
+                  item.href === "/admin/dashboard" &&
+                  (!userAuthenticated || !getCurrentUser()?.isStaff)
+                ) {
+                  return null;
+                }
+                return (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className={cn(
+                      "text-sm font-medium transition-colors duration-300 hover:text-gray-600",
+                      {
+                        "text-white":
+                          !isScrolled &&
+                          !isMobileMenuOpen &&
+                          (window.location.pathname === "/" ||
+                            window.location.pathname === "/about"),
+                        "text-gray-900 dark:text-white":
+                          isScrolled ||
+                          isMobileMenuOpen ||
+                          (window.location.pathname !== "/" &&
+                            window.location.pathname !== "/about"),
+                      },
+                    )}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })}
 
               <div className="flex items-center space-x-3">
                 <ThemeToggle />
@@ -292,16 +302,25 @@ const Navbar = ({
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
             <div className="md:hidden pb-4">
-              {menuItems.map((item, index) => (
-                <a
-                  key={index}
-                  href={item.href}
-                  className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-gray-600 dark:hover:text-gray-300"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-              ))}
+              {menuItems.map((item, index) => {
+                // Only show Admin link if user is staff
+                if (
+                  item.href === "/admin/dashboard" &&
+                  (!userAuthenticated || !getCurrentUser()?.isStaff)
+                ) {
+                  return null;
+                }
+                return (
+                  <a
+                    key={index}
+                    href={item.href}
+                    className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-gray-600 dark:hover:text-gray-300"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {item.label}
+                  </a>
+                );
+              })}
 
               <div className="flex items-center justify-between border-t dark:border-gray-700 pt-2 mt-2">
                 <ThemeToggle />
