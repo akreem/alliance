@@ -154,7 +154,8 @@ const Navbar = ({
 
               {userAuthenticated ? (
                 <div className="flex items-center space-x-4">
-                  <div
+                  <a
+                    href="/account"
                     className={cn("text-sm font-medium flex items-center", {
                       "text-white":
                         !isScrolled &&
@@ -169,7 +170,7 @@ const Navbar = ({
                     })}
                   >
                     <User className="h-4 w-4 mr-1" /> {username}
-                  </div>
+                  </a>
                   <button
                     onClick={handleLogout}
                     className={cn(
@@ -261,9 +262,13 @@ const Navbar = ({
 
               {userAuthenticated ? (
                 <>
-                  <div className="block py-2 text-gray-900 text-sm font-medium flex items-center">
+                  <a
+                    href="/account"
+                    className="block py-2 text-gray-900 text-sm font-medium flex items-center"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
                     <User className="h-4 w-4 mr-1" /> {username}
-                  </div>
+                  </a>
                   <button
                     onClick={handleLogout}
                     className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left flex items-center"

@@ -15,6 +15,7 @@ import {
 import AdminLogin from "./components/admin/AdminLogin";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import AuthPage from "./components/auth/AuthPage";
+import AccountManagement from "./components/auth/AccountManagement";
 import Navbar from "./components/navigation/Navbar";
 import routes from "tempo-routes";
 
@@ -39,6 +40,7 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/auth" element={<AuthPage />} />
+          <Route path="/account" element={<AccountManagement />} />
         </Routes>
         {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
       </div>

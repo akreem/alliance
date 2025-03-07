@@ -19,6 +19,8 @@ const AuthDialog = ({
 
   const handleSuccess = () => {
     onOpenChange(false);
+    // Force a page refresh to update the navbar
+    window.location.reload();
   };
 
   return (
