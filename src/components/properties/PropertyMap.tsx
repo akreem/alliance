@@ -4,6 +4,7 @@ import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { useProperties } from "./useProperties";
 
 interface PropertyLocation {
   id: string;
@@ -68,6 +69,22 @@ const defaultLocations: PropertyLocation[] = [
 ];
 
 const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
+  // Get properties from the API
+  const { properties } = useProperties();
+
+  // Use API properties if available, otherwise use default locations
+  const displayLocations =
+    properties.length > 0
+      ? properties.map((p) => ({
+          id: p.id,
+          name: p.title,
+          location: p.location,
+          lat: p.lat || 36.8065, // Default to Tunis if no coordinates
+          lng: p.lng || 10.1815,
+          price: p.price,
+          type: p.type,
+        }))
+      : locations;
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const popupRefs = useRef<{ [key: string]: mapboxgl.Popup }>({});
@@ -92,7 +109,7 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
 
     // Add markers when map loads
     map.current.on("load", () => {
-      locations.forEach((location) => {
+      displayLocations.forEach((location) => {
         // Create custom HTML element for the marker - simpler for better performance
         const markerEl = document.createElement("div");
         markerEl.className = "custom-marker";
@@ -175,7 +192,7 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
         map.current = null;
       }
     };
-  }, [locations]);
+  }, [displayLocations]);
 
   return (
     <section className="py-16 bg-white">
@@ -205,7 +222,7 @@ const PropertyMap = ({ locations = defaultLocations }: PropertyMapProps) => {
 
         {/* Property list below map */}
         <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {locations.map((location, index) => (
+          {displayLocations.map((location, index) => (
             <motion.div
               key={location.id}
               initial={{ opacity: 0, y: 20 }}

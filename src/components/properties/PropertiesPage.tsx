@@ -12,7 +12,13 @@ import { useProperties } from "./useProperties";
 import { Property } from "@/services/api";
 
 const PropertiesPage = () => {
-  const { properties, loading, error, handleToggleFavorite } = useProperties();
+  const { properties, loading, error, handleToggleFavorite, fetchProperties } =
+    useProperties();
+
+  // Force fetch properties when component mounts
+  useEffect(() => {
+    fetchProperties();
+  }, []);
   const [searchTerm, setSearchTerm] = useState("");
   const [priceRange, setPriceRange] = useState([10000, 950000]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -20,6 +26,12 @@ const PropertiesPage = () => {
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
 
   useEffect(() => {
+    // Force fetch properties on component mount
+    const fetchData = async () => {
+      await useProperties().fetchProperties();
+    };
+    fetchData();
+
     if (properties.length > 0) {
       setPropertyTypes([
         ...new Set(properties.map((property) => property.type)),
