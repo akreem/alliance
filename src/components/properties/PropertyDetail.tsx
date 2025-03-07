@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
   ArrowLeft,
@@ -21,15 +21,33 @@ import { Property } from "@/services/api";
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  const passedPropertyData = location.state?.propertyData;
+
+  // If we have property data passed via Link state, use it to initialize
+  React.useEffect(() => {
+    if (passedPropertyData && passedPropertyData.id === id) {
+      window.propertyData = passedPropertyData;
+    }
+  }, [passedPropertyData, id]);
+
   const { property, loading, error, handleToggleFavorite } = usePropertyDetail(
     id || "",
   );
 
-  // Fallback to API data if property not found
+  // Always fetch directly from API to ensure we get the correct property
   React.useEffect(() => {
-    if (error && id) {
+    if (id) {
       const fetchDirectFromAPI = async () => {
         try {
+          // First try to get the specific property
+          const propertyData = await getProperty(id);
+          if (propertyData) {
+            // If successful, we don't need to do anything as usePropertyDetail will handle it
+            return;
+          }
+
+          // If that fails, try to get it from the properties list
           const allProperties = await getProperties();
           const foundProperty = allProperties.find(
             (p) => p.id.toString() === id,
@@ -45,7 +63,7 @@ const PropertyDetail = () => {
       };
       fetchDirectFromAPI();
     }
-  }, [error, id]);
+  }, [id]);
 
   if (loading) {
     return (

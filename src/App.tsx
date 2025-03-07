@@ -23,8 +23,7 @@ function App() {
     <Suspense fallback={<p>Loading...</p>}>
       <div>
         {window.location.pathname !== "/" &&
-          !window.location.pathname.startsWith("/admin") &&
-          !window.location.pathname.startsWith("/auth") && <Navbar />}
+          !window.location.pathname.startsWith("/admin") && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<ContactPage />} />

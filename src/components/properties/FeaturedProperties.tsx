@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import PropertyCard from "./PropertyCard";
 import { useProperties } from "./useProperties";
@@ -11,7 +11,13 @@ interface FeaturedPropertiesProps {
 const FeaturedProperties = ({
   properties: propProperties,
 }: FeaturedPropertiesProps) => {
-  const { properties, loading, error, handleToggleFavorite } = useProperties();
+  const { properties, loading, error, handleToggleFavorite, fetchProperties } =
+    useProperties();
+
+  // Make sure we have the latest properties
+  useEffect(() => {
+    fetchProperties();
+  }, []);
 
   // Use provided properties or fetched properties
   const displayProperties = propProperties || properties;

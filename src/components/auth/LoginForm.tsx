@@ -15,9 +15,14 @@ import { loginUser } from "@/services/api";
 interface LoginFormProps {
   onSuccess?: () => void;
   onSignupClick?: () => void;
+  isDialog?: boolean;
 }
 
-const LoginForm = ({ onSuccess, onSignupClick }: LoginFormProps) => {
+const LoginForm = ({
+  onSuccess,
+  onSignupClick,
+  isDialog = false,
+}: LoginFormProps) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -52,46 +57,68 @@ const LoginForm = ({ onSuccess, onSignupClick }: LoginFormProps) => {
     }
   };
 
+  const formContent = (
+    <form onSubmit={handleLogin} className="space-y-4">
+      <div className="space-y-2">
+        <label htmlFor="username" className="text-sm font-medium">
+          Username
+        </label>
+        <Input
+          id="username"
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+          placeholder="Enter your username"
+        />
+      </div>
+      <div className="space-y-2">
+        <label htmlFor="password" className="text-sm font-medium">
+          Password
+        </label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          placeholder="Enter your password"
+        />
+      </div>
+      {error && <p className="text-red-500 text-sm">{error}</p>}
+      <Button type="submit" className="w-full" disabled={loading}>
+        {loading ? "Logging in..." : "Log In"}
+      </Button>
+    </form>
+  );
+
+  if (isDialog) {
+    return (
+      <div className="space-y-4">
+        {formContent}
+        {onSignupClick && (
+          <p className="text-sm text-center text-gray-500 pt-4">
+            Don't have an account?{" "}
+            <button
+              type="button"
+              onClick={onSignupClick}
+              className="text-primary hover:underline"
+            >
+              Sign up
+            </button>
+          </p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <Card className="w-[400px]">
       <CardHeader>
         <CardTitle className="text-2xl">Welcome Back</CardTitle>
         <CardDescription>Log in to your account</CardDescription>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleLogin} className="space-y-4">
-          <div className="space-y-2">
-            <label htmlFor="username" className="text-sm font-medium">
-              Username
-            </label>
-            <Input
-              id="username"
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-              placeholder="Enter your username"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
-              Password
-            </label>
-            <Input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Enter your password"
-            />
-          </div>
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Logging in..." : "Log In"}
-          </Button>
-        </form>
-      </CardContent>
+      <CardContent>{formContent}</CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-gray-500">
           Don't have an account?{" "}
