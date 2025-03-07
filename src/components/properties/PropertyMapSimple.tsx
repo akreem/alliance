@@ -69,7 +69,7 @@ const PropertyMapSimple = ({
   locations = defaultLocations,
 }: PropertyMapProps) => {
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white dark:bg-gray-800">
       <div className="max-w-7xl mx-auto px-4">
         <motion.div
           initial={{ opacity: 0 }}
@@ -78,10 +78,10 @@ const PropertyMapSimple = ({
           viewport={{ once: true }}
           className="text-center mb-12"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
             Nos Propriétés en Tunisie
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Explorez nos propriétés exclusives dans les emplacements les plus
             recherchés de Tunisie
           </p>
@@ -105,14 +105,16 @@ const PropertyMapSimple = ({
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+              className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
             >
               <Link to={`/property/${location.id}`} className="block">
                 <div className="flex items-center mb-2">
                   <MapPin className="h-5 w-5 text-primary mr-2" />
                   <h3 className="font-semibold">{location.location}</h3>
                 </div>
-                <p className="text-gray-600 mb-2">{location.name}</p>
+                <p className="text-gray-600 dark:text-gray-300 mb-2">
+                  {location.name}
+                </p>
                 <div className="flex justify-between items-center">
                   <span className="font-bold text-primary">
                     {location.price}

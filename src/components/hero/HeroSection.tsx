@@ -28,7 +28,7 @@ const HeroSection = ({
   }, []);
 
   return (
-    <div className="relative w-full h-[800px] overflow-hidden bg-black">
+    <div className="relative w-full h-[800px] overflow-hidden bg-black dark:bg-gray-900">
       <motion.div
         className="absolute inset-0 w-full h-full"
         style={{

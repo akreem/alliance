@@ -55,7 +55,7 @@ const PropertiesPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -63,17 +63,17 @@ const PropertiesPage = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Nos Propriétés
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Découvrez notre collection exclusive de propriétés de luxe dans les
             emplacements les plus recherchés
           </p>
         </motion.div>
 
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-10">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-10">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Search */}
             <div>

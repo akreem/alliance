@@ -31,7 +31,7 @@ const PropertyCard = ({
   onFavoriteClick = () => {},
 }: PropertyCardProps) => {
   return (
-    <Card className="w-[380px] h-[480px] overflow-hidden group bg-white transition-all duration-300 hover:shadow-xl">
+    <Card className="w-[380px] h-[480px] overflow-hidden group bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-xl">
       <Link
         to={`/property/${id}`}
         className="block"
@@ -94,11 +94,13 @@ const PropertyCard = ({
             },
           }}
         >
-          <h3 className="text-xl font-semibold mb-2">{title}</h3>
-          <p className="text-gray-600 mb-4">{location}</p>
+          <h3 className="text-xl font-semibold mb-2 dark:text-white">
+            {title}
+          </h3>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">{location}</p>
         </Link>
       </CardContent>
-      <CardFooter className="px-6 py-4 border-t flex justify-between text-sm text-gray-600">
+      <CardFooter className="px-6 py-4 border-t dark:border-gray-700 flex justify-between text-sm text-gray-600 dark:text-gray-300">
         <span>{beds} Chambres</span>
         <span>{baths} Salles de bain</span>
         <span>{sqft.toLocaleString()} m²</span>

@@ -163,6 +163,14 @@ const AccountManagement = () => {
                       <h2 className="text-xl font-semibold mb-4 dark:text-white">
                         Tableau de bord administrateur
                       </h2>
+                      <div className="mb-6">
+                        <a
+                          href="/admin/dashboard"
+                          className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+                        >
+                          Accéder au tableau de bord complet
+                        </a>
+                      </div>
                       <PropertyList />
                     </div>
                   </TabsContent>
