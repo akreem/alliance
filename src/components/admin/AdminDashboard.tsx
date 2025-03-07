@@ -17,7 +17,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     // Log current auth state for debugging
     logAuthState();
-    
+
     // Check if user is authenticated
     const token = localStorage.getItem("authToken");
     if (!token) {
@@ -25,11 +25,11 @@ const AdminDashboard = () => {
       navigate("/admin/login");
     } else {
       setIsAuthenticated(true);
-      
+
       // Get username from localStorage
       const user = getCurrentUser();
       console.log("Current user:", user); // Debug log
-      
+
       if (user && user.username) {
         console.log("Setting username:", user.username); // Debug log
         setUsername(user.username);
@@ -65,7 +65,12 @@ const AdminDashboard = () => {
 
   // For testing: set mock auth data
   const handleSetMockData = () => {
-    setMockAuthData();
+    setMockAuthData(false);
+    window.location.reload();
+  };
+
+  const handleSetMockAdminData = () => {
+    setMockAuthData(true);
     window.location.reload();
   };
 
@@ -113,16 +118,30 @@ const AdminDashboard = () => {
           <TabsContent value="add-property">
             <PropertyForm onSuccess={() => setActiveTab("properties")} />
           </TabsContent>
-          
+
           <TabsContent value="debug">
             <div className="bg-white p-6 rounded-lg shadow">
               <h2 className="text-xl font-semibold mb-4">Debug Tools</h2>
               <div className="space-y-4">
                 <div>
-                  <p className="mb-2">Current username: <strong>{username || "Not set"}</strong></p>
-                  <p className="mb-2">Authentication status: <strong>{isAuthenticated ? "Authenticated" : "Not authenticated"}</strong></p>
+                  <p className="mb-2">
+                    Current username: <strong>{username || "Not set"}</strong>
+                  </p>
+                  <p className="mb-2">
+                    Authentication status:{" "}
+                    <strong>
+                      {isAuthenticated ? "Authenticated" : "Not authenticated"}
+                    </strong>
+                  </p>
                 </div>
-                <Button onClick={handleSetMockData}>Set Mock Auth Data</Button>
+                <div className="space-y-2">
+                  <Button onClick={handleSetMockData} className="mr-2">
+                    Set Mock User Data
+                  </Button>
+                  <Button onClick={handleSetMockAdminData}>
+                    Set Mock Admin Data
+                  </Button>
+                </div>
               </div>
             </div>
           </TabsContent>

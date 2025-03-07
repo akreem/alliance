@@ -3,18 +3,23 @@
 /**
  * Sets mock authentication data in localStorage for testing
  */
-export const setMockAuthData = (): void => {
+export const setMockAuthData = (isAdmin: boolean = false): void => {
   const mockUser = {
     id: 999,
-    username: "TestAdmin",
-    email: "testadmin@example.com",
-    token: "mock-test-token-123456"
+    username: isAdmin ? "admin" : "TestUser",
+    email: isAdmin ? "admin@example.com" : "testuser@example.com",
+    token: "mock-test-token-123456",
+    isAdmin: isAdmin,
   };
-  
+
   localStorage.setItem("authToken", mockUser.token);
   localStorage.setItem("user", JSON.stringify(mockUser));
-  
+
   console.log("Mock auth data set:", mockUser);
+};
+
+export const setMockAdminData = (): void => {
+  setMockAuthData(true);
 };
 
 /**
@@ -23,7 +28,7 @@ export const setMockAuthData = (): void => {
 export const clearAuthData = (): void => {
   localStorage.removeItem("authToken");
   localStorage.removeItem("user");
-  
+
   console.log("Auth data cleared");
 };
 
@@ -33,10 +38,10 @@ export const clearAuthData = (): void => {
 export const logAuthState = (): void => {
   const token = localStorage.getItem("authToken");
   const userStr = localStorage.getItem("user");
-  
+
   console.log("Current auth state:");
   console.log("- Token exists:", !!token);
-  
+
   if (userStr) {
     try {
       const user = JSON.parse(userStr);

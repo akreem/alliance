@@ -6,6 +6,7 @@ import { Input } from "../ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { getCurrentUser } from "@/utils/auth";
 import Navbar from "../navigation/Navbar";
+import PropertyList from "../admin/PropertyList";
 
 const AccountManagement = () => {
   const navigate = useNavigate();
@@ -36,10 +37,13 @@ const AccountManagement = () => {
                 onValueChange={setActiveTab}
                 className="w-full"
               >
-                <TabsList className="grid w-full grid-cols-3 mb-8">
+                <TabsList className="grid w-full grid-cols-4 mb-8">
                   <TabsTrigger value="profile">Profil</TabsTrigger>
                   <TabsTrigger value="favorites">Favoris</TabsTrigger>
                   <TabsTrigger value="security">Sécurité</TabsTrigger>
+                  {user.isAdmin && (
+                    <TabsTrigger value="admin">Administration</TabsTrigger>
+                  )}
                 </TabsList>
 
                 <TabsContent value="profile" className="space-y-6">
@@ -150,6 +154,17 @@ const AccountManagement = () => {
                     </div>
                   </div>
                 </TabsContent>
+
+                {user.isAdmin && (
+                  <TabsContent value="admin" className="space-y-6">
+                    <div className="bg-white p-6 rounded-lg shadow">
+                      <h2 className="text-xl font-semibold mb-4">
+                        Tableau de bord administrateur
+                      </h2>
+                      <PropertyList />
+                    </div>
+                  </TabsContent>
+                )}
               </Tabs>
             </CardContent>
           </Card>
