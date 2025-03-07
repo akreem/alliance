@@ -4,7 +4,7 @@ import Navbar from "../navigation/Navbar";
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-900">
       <Navbar />
       {/* Hero Section */}
       <div className="relative h-[500px] bg-gray-900">
@@ -36,7 +36,7 @@ const AboutPage = () => {
       </div>
 
       {/* Our Story */}
-      <section className="py-24 px-4 bg-white">
+      <section className="py-24 px-4 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -46,16 +46,16 @@ const AboutPage = () => {
             className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
           >
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-8">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
                 Notre Histoire
               </h2>
-              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                 Fondée en 2005, Alliance Immobilier s'est imposée comme la
                 destination privilégiée pour l'immobilier haut de gamme. Notre
                 parcours a commencé avec une vision simple : offrir un service
                 inégalé dans le marché immobilier de luxe.
               </p>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 Aujourd'hui, nous sommes fiers d'être reconnus comme des leaders
                 du secteur, connus pour notre portefeuille exceptionnel de
                 propriétés et notre engagement envers la satisfaction client.
@@ -75,7 +75,7 @@ const AboutPage = () => {
       </section>
 
       {/* Our Values */}
-      <section className="py-24 px-4 bg-gray-50">
+      <section className="py-24 px-4 bg-gray-50 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -84,10 +84,10 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Nos Valeurs
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Chez Alliance Immobilier, nous sommes guidés par un ensemble de
               valeurs fondamentales qui définissent qui nous sommes et comment
               nous opérons.
@@ -118,12 +118,14 @@ const AboutPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.2 }}
                 viewport={{ once: true }}
-                className="bg-white p-10 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
+                className="bg-white dark:bg-gray-700 p-10 rounded-2xl shadow-xl hover:shadow-2xl transition-shadow duration-300"
               >
-                <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
                   {value.title}
                 </h3>
-                <p className="text-lg text-gray-600">{value.description}</p>
+                <p className="text-lg text-gray-600 dark:text-gray-300">
+                  {value.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -131,7 +133,7 @@ const AboutPage = () => {
       </section>
 
       {/* Our Team */}
-      <section className="py-24 px-4 bg-white">
+      <section className="py-24 px-4 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -140,10 +142,10 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Notre Équipe
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
               Rencontrez les professionnels exceptionnels qui font d'Alliance
               Immobilier le leader du secteur qu'elle est aujourd'hui.
             </p>
@@ -194,7 +196,7 @@ const AboutPage = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
+                className="bg-white dark:bg-gray-700 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 text-center"
               >
                 <div className="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden bg-gray-100 border-4 border-gray-200">
                   <img
@@ -203,10 +205,12 @@ const AboutPage = () => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-2">
+                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                   {member.name}
                 </h3>
-                <p className="text-lg text-gray-600">{member.role}</p>
+                <p className="text-lg text-gray-600 dark:text-gray-300">
+                  {member.role}
+                </p>
               </motion.div>
             ))}
           </div>

@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { Menu, LogOut, User } from "lucide-react";
+import {
+  Menu,
+  LogOut,
+  User,
+  ChevronRight,
+  Settings,
+  Globe,
+  DollarSign,
+} from "lucide-react";
 import { isAuthenticated, getCurrentUser, logout } from "@/utils/auth";
 import AuthDialog from "../auth/AuthDialog";
 import { ThemeToggle } from "../ThemeToggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
 
 interface NavbarProps {
   logo?: string;
@@ -153,78 +168,116 @@ const Navbar = ({
                 </a>
               ))}
 
-              <div className="flex items-center space-x-4">
-                <ThemeToggle />
-
-                {userAuthenticated ? (
-                  <div className="flex items-center space-x-4">
-                    <a
-                      href="/account"
-                      className={cn("text-sm font-medium flex items-center", {
-                        "text-white":
-                          !isScrolled &&
-                          !isMobileMenuOpen &&
-                          (window.location.pathname === "/" ||
-                            window.location.pathname === "/about"),
-                        "text-gray-900 dark:text-white":
-                          isScrolled ||
-                          isMobileMenuOpen ||
-                          (window.location.pathname !== "/" &&
-                            window.location.pathname !== "/about"),
-                      })}
+              {userAuthenticated ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="flex items-center space-x-2 cursor-pointer bg-gray-800 dark:bg-gray-700 rounded-full p-1 pr-3">
+                      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                        <User className="h-4 w-4" />
+                      </div>
+                      <span className="text-sm font-medium text-white">
+                        {username}
+                      </span>
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="w-56 dark:bg-gray-800"
+                  >
+                    <div className="flex items-center p-2">
+                      <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">
+                        <User className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="font-medium dark:text-white">
+                          {username}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">
+                          {getCurrentUser()?.email}
+                        </p>
+                      </div>
+                    </div>
+                    <DropdownMenuSeparator className="dark:border-gray-700" />
+                    <DropdownMenuItem className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700">
+                      <Globe className="mr-2 h-4 w-4" />
+                      <span>Langue</span>
+                      <div className="ml-auto flex items-center">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          Français
+                        </span>
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700">
+                      <DollarSign className="mr-2 h-4 w-4" />
+                      <span>Devise</span>
+                      <div className="ml-auto flex items-center">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          TND
+                        </span>
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </div>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700">
+                      <div className="mr-2 h-4 w-4 flex items-center justify-center">
+                        <ThemeToggle showText={true} />
+                      </div>
+                      <span>Thème</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="dark:border-gray-700" />
+                    <DropdownMenuItem
+                      className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700"
+                      onClick={() => (window.location.href = "/account")}
                     >
-                      <User className="h-4 w-4 mr-1" /> {username}
-                    </a>
-                    <button
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Mon compte</span>
+                    </DropdownMenuItem>
+                    {getCurrentUser()?.isStaff && (
+                      <DropdownMenuItem
+                        className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700"
+                        onClick={() =>
+                          (window.location.href = "/admin/dashboard")
+                        }
+                      >
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Administration</span>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuSeparator className="dark:border-gray-700" />
+                    <DropdownMenuItem
+                      className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700"
                       onClick={handleLogout}
-                      className={cn(
-                        "text-sm font-medium transition-colors duration-300 hover:text-gray-600 dark:hover:text-gray-300 flex items-center",
-                        {
-                          "text-white":
-                            !isScrolled &&
-                            !isMobileMenuOpen &&
-                            (window.location.pathname === "/" ||
-                              window.location.pathname === "/about"),
-                          "text-gray-900 dark:text-white":
-                            isScrolled ||
-                            isMobileMenuOpen ||
-                            (window.location.pathname !== "/" &&
-                              window.location.pathname !== "/about"),
-                        },
-                      )}
                     >
-                      <LogOut className="h-4 w-4 mr-1" /> Déconnexion
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center">
-                    <a
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openLoginDialog();
-                      }}
-                      className={cn(
-                        "text-sm font-medium transition-colors duration-300 hover:text-gray-600 dark:hover:text-gray-300",
-                        {
-                          "text-white":
-                            !isScrolled &&
-                            !isMobileMenuOpen &&
-                            (window.location.pathname === "/" ||
-                              window.location.pathname === "/about"),
-                          "text-gray-900 dark:text-white":
-                            isScrolled ||
-                            isMobileMenuOpen ||
-                            (window.location.pathname !== "/" &&
-                              window.location.pathname !== "/about"),
-                        },
-                      )}
-                    >
-                      Connexion / Inscription
-                    </a>
-                  </div>
-                )}
-              </div>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Déconnexion</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Button
+                    variant="default"
+                    className="rounded-full bg-blue-600 hover:bg-blue-700"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openLoginDialog();
+                    }}
+                  >
+                    Connexion
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-gray-800"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openSignupDialog();
+                    }}
+                  >
+                    Inscription
+                  </Button>
+                  <ThemeToggle />
+                </div>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -282,18 +335,29 @@ const Navbar = ({
                   </button>
                 </>
               ) : (
-                <div className="pt-2">
-                  <a
-                    href="#"
+                <div className="pt-2 flex flex-col space-y-2">
+                  <Button
+                    variant="default"
+                    className="rounded-full bg-blue-600 hover:bg-blue-700"
                     onClick={(e) => {
                       e.preventDefault();
                       openLoginDialog();
                       setIsMobileMenuOpen(false);
                     }}
-                    className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left"
                   >
-                    Connexion / Inscription
-                  </a>
+                    Connexion
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      openSignupDialog();
+                      setIsMobileMenuOpen(false);
+                    }}
+                  >
+                    Inscription
+                  </Button>
                 </div>
               )}
             </div>

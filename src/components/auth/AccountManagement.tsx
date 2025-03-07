@@ -163,13 +163,22 @@ const AccountManagement = () => {
                       <h2 className="text-xl font-semibold mb-4 dark:text-white">
                         Tableau de bord administrateur
                       </h2>
-                      <div className="mb-6">
+                      <div className="mb-6 flex space-x-4">
                         <a
                           href="/admin/dashboard"
                           className="inline-flex items-center px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
                         >
                           Accéder au tableau de bord complet
                         </a>
+                        <Button
+                          onClick={() =>
+                            (window.location.href = "/admin/dashboard")
+                          }
+                          variant="outline"
+                          className="dark:text-white dark:border-gray-600"
+                        >
+                          Gérer les propriétés
+                        </Button>
                       </div>
                       <PropertyList />
                     </div>

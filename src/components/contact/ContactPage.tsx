@@ -15,7 +15,7 @@ import Navbar from "../navigation/Navbar";
 
 const ContactPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Navbar />
       <div className="h-20"></div>
 
@@ -59,10 +59,10 @@ const ContactPage = () => {
             className="space-y-10"
           >
             <div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
                 Entrer en Contact
               </h2>
-              <p className="text-xl text-gray-600">
+              <p className="text-xl text-gray-600 dark:text-gray-300">
                 Contactez-nous pour des propriétés exceptionnelles et un service
                 personnalisé. Notre équipe d'experts en immobilier de luxe est
                 prête à vous assister.
@@ -75,8 +75,10 @@ const ContactPage = () => {
                   <MapPin className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">Notre Adresse</h3>
-                  <span className="text-gray-600">
+                  <h3 className="text-lg font-semibold mb-1 dark:text-white">
+                    Notre Adresse
+                  </h3>
+                  <span className="text-gray-600 dark:text-gray-300">
                     123 Avenue Habib Bourguiba, Tunis 1000, Tunisia
                   </span>
                 </div>
@@ -87,8 +89,12 @@ const ContactPage = () => {
                   <Phone className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">Téléphone</h3>
-                  <span className="text-gray-600">+216 71 123 456</span>
+                  <h3 className="text-lg font-semibold mb-1 dark:text-white">
+                    Téléphone
+                  </h3>
+                  <span className="text-gray-600 dark:text-gray-300">
+                    +216 71 123 456
+                  </span>
                 </div>
               </div>
 
@@ -97,8 +103,10 @@ const ContactPage = () => {
                   <Mail className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">E-mail</h3>
-                  <span className="text-gray-600">
+                  <h3 className="text-lg font-semibold mb-1 dark:text-white">
+                    E-mail
+                  </h3>
+                  <span className="text-gray-600 dark:text-gray-300">
                     contact@allianceimmobilier.tn
                   </span>
                 </div>
@@ -106,7 +114,7 @@ const ContactPage = () => {
             </div>
 
             <div className="space-y-6">
-              <h3 className="text-2xl font-semibold text-gray-900">
+              <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
                 Suivez-nous
               </h3>
               <div className="flex space-x-6">
@@ -114,33 +122,33 @@ const ContactPage = () => {
                   href="https://facebook.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gray-100 p-4 rounded-full hover:bg-primary/10 transition-colors"
+                  className="bg-gray-100 dark:bg-gray-700 p-4 rounded-full hover:bg-primary/10 transition-colors"
                 >
-                  <Facebook className="h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
+                  <Facebook className="h-6 w-6 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" />
                 </a>
                 <a
                   href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gray-100 p-4 rounded-full hover:bg-primary/10 transition-colors"
+                  className="bg-gray-100 dark:bg-gray-700 p-4 rounded-full hover:bg-primary/10 transition-colors"
                 >
-                  <Instagram className="h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
+                  <Instagram className="h-6 w-6 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" />
                 </a>
                 <a
                   href="https://twitter.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gray-100 p-4 rounded-full hover:bg-primary/10 transition-colors"
+                  className="bg-gray-100 dark:bg-gray-700 p-4 rounded-full hover:bg-primary/10 transition-colors"
                 >
-                  <Twitter className="h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
+                  <Twitter className="h-6 w-6 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" />
                 </a>
                 <a
                   href="https://linkedin.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="bg-gray-100 p-4 rounded-full hover:bg-primary/10 transition-colors"
+                  className="bg-gray-100 dark:bg-gray-700 p-4 rounded-full hover:bg-primary/10 transition-colors"
                 >
-                  <Linkedin className="h-6 w-6 text-gray-700 hover:text-primary transition-colors" />
+                  <Linkedin className="h-6 w-6 text-gray-700 dark:text-gray-300 hover:text-primary transition-colors" />
                 </a>
               </div>
             </div>
@@ -151,16 +159,16 @@ const ContactPage = () => {
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-2xl shadow-xl p-10"
+            className="bg-white dark:bg-gray-700 rounded-2xl shadow-xl p-10"
           >
-            <h3 className="text-2xl font-bold text-gray-900 mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">
               Envoyez-nous un Message
             </h3>
             <form className="space-y-8">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
                   Nom Complet
                 </label>
@@ -175,7 +183,7 @@ const ContactPage = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
                   Adresse E-mail
                 </label>
@@ -190,7 +198,7 @@ const ContactPage = () => {
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
                   Numéro de Téléphone
                 </label>
@@ -205,7 +213,7 @@ const ContactPage = () => {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-medium text-gray-700 mb-2"
+                  className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                 >
                   Votre Message
                 </label>
