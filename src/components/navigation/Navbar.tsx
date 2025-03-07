@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Menu, LogOut, User } from "lucide-react";
 import { isAuthenticated, getCurrentUser, logout } from "@/utils/auth";
 import AuthDialog from "../auth/AuthDialog";
+import { ThemeToggle } from "../ThemeToggle";
 
 interface NavbarProps {
   logo?: string;
@@ -93,7 +94,7 @@ const Navbar = ({
               !isMobileMenuOpen &&
               (window.location.pathname === "/" ||
                 window.location.pathname === "/about"),
-            "bg-white shadow-md":
+            "bg-white dark:bg-gray-900 shadow-md":
               isScrolled ||
               isMobileMenuOpen ||
               (window.location.pathname !== "/" &&
@@ -101,7 +102,7 @@ const Navbar = ({
           },
         )}
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 dark:bg-gray-900">
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <a
@@ -112,7 +113,7 @@ const Navbar = ({
                   !isMobileMenuOpen &&
                   (window.location.pathname === "/" ||
                     window.location.pathname === "/about"),
-                "text-gray-900":
+                "text-gray-900 dark:text-white":
                   isScrolled ||
                   isMobileMenuOpen ||
                   (window.location.pathname !== "/" &&
@@ -140,7 +141,7 @@ const Navbar = ({
                         !isMobileMenuOpen &&
                         (window.location.pathname === "/" ||
                           window.location.pathname === "/about"),
-                      "text-gray-900":
+                      "text-gray-900 dark:text-white":
                         isScrolled ||
                         isMobileMenuOpen ||
                         (window.location.pathname !== "/" &&
@@ -152,74 +153,78 @@ const Navbar = ({
                 </a>
               ))}
 
-              {userAuthenticated ? (
-                <div className="flex items-center space-x-4">
-                  <a
-                    href="/account"
-                    className={cn("text-sm font-medium flex items-center", {
-                      "text-white":
-                        !isScrolled &&
-                        !isMobileMenuOpen &&
-                        (window.location.pathname === "/" ||
-                          window.location.pathname === "/about"),
-                      "text-gray-900":
-                        isScrolled ||
-                        isMobileMenuOpen ||
-                        (window.location.pathname !== "/" &&
-                          window.location.pathname !== "/about"),
-                    })}
-                  >
-                    <User className="h-4 w-4 mr-1" /> {username}
-                  </a>
-                  <button
-                    onClick={handleLogout}
-                    className={cn(
-                      "text-sm font-medium transition-colors duration-300 hover:text-gray-600 flex items-center",
-                      {
+              <div className="flex items-center space-x-4">
+                <ThemeToggle />
+
+                {userAuthenticated ? (
+                  <div className="flex items-center space-x-4">
+                    <a
+                      href="/account"
+                      className={cn("text-sm font-medium flex items-center", {
                         "text-white":
                           !isScrolled &&
                           !isMobileMenuOpen &&
                           (window.location.pathname === "/" ||
                             window.location.pathname === "/about"),
-                        "text-gray-900":
+                        "text-gray-900 dark:text-white":
                           isScrolled ||
                           isMobileMenuOpen ||
                           (window.location.pathname !== "/" &&
                             window.location.pathname !== "/about"),
-                      },
-                    )}
-                  >
-                    <LogOut className="h-4 w-4 mr-1" /> Déconnexion
-                  </button>
-                </div>
-              ) : (
-                <div className="flex items-center">
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openLoginDialog();
-                    }}
-                    className={cn(
-                      "text-sm font-medium transition-colors duration-300 hover:text-gray-600",
-                      {
-                        "text-white":
-                          !isScrolled &&
-                          !isMobileMenuOpen &&
-                          (window.location.pathname === "/" ||
-                            window.location.pathname === "/about"),
-                        "text-gray-900":
-                          isScrolled ||
-                          isMobileMenuOpen ||
-                          (window.location.pathname !== "/" &&
-                            window.location.pathname !== "/about"),
-                      },
-                    )}
-                  >
-                    Connexion / Inscription
-                  </a>
-                </div>
-              )}
+                      })}
+                    >
+                      <User className="h-4 w-4 mr-1" /> {username}
+                    </a>
+                    <button
+                      onClick={handleLogout}
+                      className={cn(
+                        "text-sm font-medium transition-colors duration-300 hover:text-gray-600 dark:hover:text-gray-300 flex items-center",
+                        {
+                          "text-white":
+                            !isScrolled &&
+                            !isMobileMenuOpen &&
+                            (window.location.pathname === "/" ||
+                              window.location.pathname === "/about"),
+                          "text-gray-900 dark:text-white":
+                            isScrolled ||
+                            isMobileMenuOpen ||
+                            (window.location.pathname !== "/" &&
+                              window.location.pathname !== "/about"),
+                        },
+                      )}
+                    >
+                      <LogOut className="h-4 w-4 mr-1" /> Déconnexion
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <a
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openLoginDialog();
+                      }}
+                      className={cn(
+                        "text-sm font-medium transition-colors duration-300 hover:text-gray-600 dark:hover:text-gray-300",
+                        {
+                          "text-white":
+                            !isScrolled &&
+                            !isMobileMenuOpen &&
+                            (window.location.pathname === "/" ||
+                              window.location.pathname === "/about"),
+                          "text-gray-900 dark:text-white":
+                            isScrolled ||
+                            isMobileMenuOpen ||
+                            (window.location.pathname !== "/" &&
+                              window.location.pathname !== "/about"),
+                        },
+                      )}
+                    >
+                      Connexion / Inscription
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Mobile Menu Button */}

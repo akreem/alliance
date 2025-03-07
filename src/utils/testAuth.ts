@@ -9,7 +9,7 @@ export const setMockAuthData = (isAdmin: boolean = false): void => {
     username: isAdmin ? "admin" : "TestUser",
     email: isAdmin ? "admin@example.com" : "testuser@example.com",
     token: "mock-test-token-123456",
-    isAdmin: isAdmin,
+    isStaff: isAdmin,
   };
 
   localStorage.setItem("authToken", mockUser.token);

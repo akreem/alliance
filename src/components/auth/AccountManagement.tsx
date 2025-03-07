@@ -22,13 +22,15 @@ const AccountManagement = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Navbar />
       <div className="pt-24 pb-16 px-4">
         <div className="max-w-4xl mx-auto">
-          <Card>
-            <CardHeader className="border-b pb-4">
-              <CardTitle className="text-2xl">Gestion du compte</CardTitle>
+          <Card className="dark:bg-gray-800 dark:text-white">
+            <CardHeader className="border-b dark:border-gray-700 pb-4">
+              <CardTitle className="text-2xl dark:text-white">
+                Gestion du compte
+              </CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <Tabs
@@ -41,7 +43,7 @@ const AccountManagement = () => {
                   <TabsTrigger value="profile">Profil</TabsTrigger>
                   <TabsTrigger value="favorites">Favoris</TabsTrigger>
                   <TabsTrigger value="security">Sécurité</TabsTrigger>
-                  {user.isAdmin && (
+                  {user.isStaff && (
                     <TabsTrigger value="admin">Administration</TabsTrigger>
                   )}
                 </TabsList>
@@ -49,7 +51,7 @@ const AccountManagement = () => {
                 <TabsContent value="profile" className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Nom d'utilisateur
                       </label>
                       <Input
@@ -60,7 +62,7 @@ const AccountManagement = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         E-mail
                       </label>
                       <Input
@@ -71,19 +73,19 @@ const AccountManagement = () => {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Prénom
                       </label>
                       <Input type="text" placeholder="Entrez votre prénom" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Nom
                       </label>
                       <Input type="text" placeholder="Entrez votre nom" />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Numéro de téléphone
                       </label>
                       <Input
@@ -98,11 +100,11 @@ const AccountManagement = () => {
                 </TabsContent>
 
                 <TabsContent value="favorites" className="space-y-6">
-                  <div className="text-center py-12 bg-gray-100 rounded-lg">
-                    <h3 className="text-xl font-medium text-gray-700 mb-2">
+                  <div className="text-center py-12 bg-gray-100 dark:bg-gray-700 rounded-lg">
+                    <h3 className="text-xl font-medium text-gray-700 dark:text-gray-200 mb-2">
                       Pas encore de favoris
                     </h3>
-                    <p className="text-gray-500 mb-4">
+                    <p className="text-gray-500 dark:text-gray-400 mb-4">
                       Les propriétés que vous marquez comme favorites
                       apparaîtront ici
                     </p>
@@ -117,12 +119,12 @@ const AccountManagement = () => {
 
                 <TabsContent value="security" className="space-y-6">
                   <div className="space-y-6">
-                    <h3 className="text-lg font-medium">
+                    <h3 className="text-lg font-medium dark:text-white">
                       Changer le mot de passe
                     </h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Mot de passe actuel
                         </label>
                         <Input
@@ -131,7 +133,7 @@ const AccountManagement = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Nouveau mot de passe
                         </label>
                         <Input
@@ -140,7 +142,7 @@ const AccountManagement = () => {
                         />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                           Confirmer le nouveau mot de passe
                         </label>
                         <Input
@@ -155,10 +157,10 @@ const AccountManagement = () => {
                   </div>
                 </TabsContent>
 
-                {user.isAdmin && (
+                {user.isStaff && (
                   <TabsContent value="admin" className="space-y-6">
-                    <div className="bg-white p-6 rounded-lg shadow">
-                      <h2 className="text-xl font-semibold mb-4">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
+                      <h2 className="text-xl font-semibold mb-4 dark:text-white">
                         Tableau de bord administrateur
                       </h2>
                       <PropertyList />

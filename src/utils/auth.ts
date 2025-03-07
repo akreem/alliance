@@ -23,7 +23,7 @@ export const getCurrentUser = () => {
       const userData = JSON.parse(user);
       // Check if user has admin role (for demo purposes)
       // In a real app, this would be determined by the backend
-      userData.isAdmin =
+      userData.isStaff =
         userData.username === "admin" || userData.email?.includes("admin");
       return userData;
     } catch (error) {
