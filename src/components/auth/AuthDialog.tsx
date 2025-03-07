@@ -28,7 +28,7 @@ const AuthDialog = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl font-bold">
-            {activeTab === "login" ? "Welcome Back" : "Create Account"}
+            {activeTab === "login" ? "Bienvenue" : "Créer un compte"}
           </DialogTitle>
         </DialogHeader>
         <Tabs
@@ -38,8 +38,8 @@ const AuthDialog = ({
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-2 mb-6">
-            <TabsTrigger value="login">Login</TabsTrigger>
-            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsTrigger value="login">Connexion</TabsTrigger>
+            <TabsTrigger value="signup">Inscription</TabsTrigger>
           </TabsList>
           <TabsContent value="login">
             <LoginForm onSuccess={handleSuccess} isDialog={true} />

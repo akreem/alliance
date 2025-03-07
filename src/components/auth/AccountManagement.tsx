@@ -27,7 +27,7 @@ const AccountManagement = () => {
         <div className="max-w-4xl mx-auto">
           <Card>
             <CardHeader className="border-b pb-4">
-              <CardTitle className="text-2xl">Account Management</CardTitle>
+              <CardTitle className="text-2xl">Gestion du compte</CardTitle>
             </CardHeader>
             <CardContent className="pt-6">
               <Tabs
@@ -37,16 +37,16 @@ const AccountManagement = () => {
                 className="w-full"
               >
                 <TabsList className="grid w-full grid-cols-3 mb-8">
-                  <TabsTrigger value="profile">Profile</TabsTrigger>
-                  <TabsTrigger value="favorites">Favorites</TabsTrigger>
-                  <TabsTrigger value="security">Security</TabsTrigger>
+                  <TabsTrigger value="profile">Profil</TabsTrigger>
+                  <TabsTrigger value="favorites">Favoris</TabsTrigger>
+                  <TabsTrigger value="security">Sécurité</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="profile" className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Username
+                        Nom d'utilisateur
                       </label>
                       <Input
                         type="text"
@@ -57,7 +57,7 @@ const AccountManagement = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Email
+                        E-mail
                       </label>
                       <Input
                         type="email"
@@ -68,79 +68,85 @@ const AccountManagement = () => {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        First Name
+                        Prénom
                       </label>
-                      <Input type="text" placeholder="Enter your first name" />
+                      <Input type="text" placeholder="Entrez votre prénom" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Last Name
+                        Nom
                       </label>
-                      <Input type="text" placeholder="Enter your last name" />
+                      <Input type="text" placeholder="Entrez votre nom" />
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Phone Number
+                        Numéro de téléphone
                       </label>
-                      <Input type="tel" placeholder="Enter your phone number" />
+                      <Input
+                        type="tel"
+                        placeholder="Entrez votre numéro de téléphone"
+                      />
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <Button>Save Changes</Button>
+                    <Button>Enregistrer les modifications</Button>
                   </div>
                 </TabsContent>
 
                 <TabsContent value="favorites" className="space-y-6">
                   <div className="text-center py-12 bg-gray-100 rounded-lg">
                     <h3 className="text-xl font-medium text-gray-700 mb-2">
-                      No favorites yet
+                      Pas encore de favoris
                     </h3>
                     <p className="text-gray-500 mb-4">
-                      Properties you mark as favorites will appear here
+                      Les propriétés que vous marquez comme favorites
+                      apparaîtront ici
                     </p>
                     <Button
                       onClick={() => navigate("/properties")}
                       variant="outline"
                     >
-                      Browse Properties
+                      Parcourir les propriétés
                     </Button>
                   </div>
                 </TabsContent>
 
                 <TabsContent value="security" className="space-y-6">
                   <div className="space-y-6">
-                    <h3 className="text-lg font-medium">Change Password</h3>
+                    <h3 className="text-lg font-medium">
+                      Changer le mot de passe
+                    </h3>
                     <div className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Current Password
+                          Mot de passe actuel
                         </label>
                         <Input
                           type="password"
-                          placeholder="Enter your current password"
+                          placeholder="Entrez votre mot de passe actuel"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          New Password
+                          Nouveau mot de passe
                         </label>
                         <Input
                           type="password"
-                          placeholder="Enter your new password"
+                          placeholder="Entrez votre nouveau mot de passe"
                         />
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Confirm New Password
+                          Confirmer le nouveau mot de passe
                         </label>
                         <Input
                           type="password"
-                          placeholder="Confirm your new password"
+                          placeholder="Confirmez votre nouveau mot de passe"
                         />
                       </div>
                     </div>
                     <div className="flex justify-end">
-                      <Button>Update Password</Button>
+                      <Button>Mettre à jour le mot de passe</Button>
                     </div>
                   </div>
                 </TabsContent>

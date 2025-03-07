@@ -35,7 +35,7 @@ const ContactPage = () => {
             transition={{ duration: 0.8 }}
             className="text-5xl font-bold text-white mb-4"
           >
-            Contact Us
+            Contactez-nous
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -43,7 +43,8 @@ const ContactPage = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-xl text-white/90 max-w-2xl"
           >
-            We're here to help with all your luxury real estate needs
+            Nous sommes là pour vous aider avec tous vos besoins immobiliers de
+            luxe
           </motion.p>
         </div>
       </div>
@@ -59,12 +60,12 @@ const ContactPage = () => {
           >
             <div>
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Get in Touch
+                Entrer en Contact
               </h2>
               <p className="text-xl text-gray-600">
-                Reach out to us for exceptional properties and personalized
-                service. Our team of luxury real estate experts is ready to
-                assist you.
+                Contactez-nous pour des propriétés exceptionnelles et un service
+                personnalisé. Notre équipe d'experts en immobilier de luxe est
+                prête à vous assister.
               </p>
             </div>
 
@@ -74,7 +75,7 @@ const ContactPage = () => {
                   <MapPin className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">Our Location</h3>
+                  <h3 className="text-lg font-semibold mb-1">Notre Adresse</h3>
                   <span className="text-gray-600">
                     123 Avenue Habib Bourguiba, Tunis 1000, Tunisia
                   </span>
@@ -86,7 +87,7 @@ const ContactPage = () => {
                   <Phone className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">Phone</h3>
+                  <h3 className="text-lg font-semibold mb-1">Téléphone</h3>
                   <span className="text-gray-600">+216 71 123 456</span>
                 </div>
               </div>
@@ -96,7 +97,7 @@ const ContactPage = () => {
                   <Mail className="h-8 w-8 text-primary" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold mb-1">Email</h3>
+                  <h3 className="text-lg font-semibold mb-1">E-mail</h3>
                   <span className="text-gray-600">
                     contact@allianceimmobilier.tn
                   </span>
@@ -106,7 +107,7 @@ const ContactPage = () => {
 
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold text-gray-900">
-                Follow Us
+                Suivez-nous
               </h3>
               <div className="flex space-x-6">
                 <a
@@ -153,7 +154,7 @@ const ContactPage = () => {
             className="bg-white rounded-2xl shadow-xl p-10"
           >
             <h3 className="text-2xl font-bold text-gray-900 mb-8">
-              Send Us a Message
+              Envoyez-nous un Message
             </h3>
             <form className="space-y-8">
               <div>
@@ -161,12 +162,12 @@ const ContactPage = () => {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Full Name
+                  Nom Complet
                 </label>
                 <Input
                   type="text"
                   id="name"
-                  placeholder="Your full name"
+                  placeholder="Votre nom complet"
                   className="h-12"
                 />
               </div>
@@ -176,12 +177,12 @@ const ContactPage = () => {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Email Address
+                  Adresse E-mail
                 </label>
                 <Input
                   type="email"
                   id="email"
-                  placeholder="your@email.com"
+                  placeholder="votre@email.com"
                   className="h-12"
                 />
               </div>
@@ -191,12 +192,12 @@ const ContactPage = () => {
                   htmlFor="phone"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Phone Number
+                  Numéro de Téléphone
                 </label>
                 <Input
                   type="tel"
                   id="phone"
-                  placeholder="(123) 456-7890"
+                  placeholder="+216 XX XXX XXX"
                   className="h-12"
                 />
               </div>
@@ -206,17 +207,17 @@ const ContactPage = () => {
                   htmlFor="message"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Your Message
+                  Votre Message
                 </label>
                 <Textarea
                   id="message"
-                  placeholder="How can we help you?"
+                  placeholder="Comment pouvons-nous vous aider ?"
                   className="min-h-[150px]"
                 />
               </div>
 
               <Button type="submit" className="w-full h-12 text-lg">
-                Send Message
+                Envoyer le Message
               </Button>
             </form>
           </motion.div>

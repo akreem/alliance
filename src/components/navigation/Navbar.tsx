@@ -189,7 +189,7 @@ const Navbar = ({
                       },
                     )}
                   >
-                    <LogOut className="h-4 w-4 mr-1" /> Logout
+                    <LogOut className="h-4 w-4 mr-1" /> Déconnexion
                   </button>
                 </div>
               ) : (
@@ -216,7 +216,7 @@ const Navbar = ({
                       },
                     )}
                   >
-                    Login / Register
+                    Connexion / Inscription
                   </a>
                 </div>
               )}
@@ -273,7 +273,7 @@ const Navbar = ({
                     onClick={handleLogout}
                     className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left flex items-center"
                   >
-                    <LogOut className="h-4 w-4 mr-1" /> Logout
+                    <LogOut className="h-4 w-4 mr-1" /> Déconnexion
                   </button>
                 </>
               ) : (
@@ -287,7 +287,7 @@ const Navbar = ({
                     }}
                     className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left"
                   >
-                    Login / Register
+                    Connexion / Inscription
                   </a>
                 </div>
               )}

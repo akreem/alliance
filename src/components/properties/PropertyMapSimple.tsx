@@ -79,11 +79,11 @@ const PropertyMapSimple = ({
           className="text-center mb-12"
         >
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Our Properties in Tunisia
+            Nos Propriétés en Tunisie
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explore our exclusive properties across Tunisia's most desirable
-            locations
+            Explorez nos propriétés exclusives dans les emplacements les plus
+            recherchés de Tunisie
           </p>
         </motion.div>
 

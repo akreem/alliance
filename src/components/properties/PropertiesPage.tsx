@@ -64,11 +64,11 @@ const PropertiesPage = () => {
           className="text-center mb-12"
         >
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Our Properties
+            Nos Propriétés
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Discover our exclusive collection of luxury properties in the most
-            desirable locations
+            Découvrez notre collection exclusive de propriétés de luxe dans les
+            emplacements les plus recherchés
           </p>
         </motion.div>
 
@@ -78,11 +78,11 @@ const PropertiesPage = () => {
             {/* Search */}
             <div>
               <Label htmlFor="search" className="mb-2 block">
-                Search
+                Recherche
               </Label>
               <Input
                 id="search"
-                placeholder="Search by location or title"
+                placeholder="Rechercher par lieu ou titre"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -90,7 +90,7 @@ const PropertiesPage = () => {
 
             {/* Price Range */}
             <div>
-              <Label className="mb-2 block">Price Range</Label>
+              <Label className="mb-2 block">Fourchette de prix</Label>
               <div className="pt-4">
                 <Slider
                   defaultValue={[10000, 950000]}
@@ -110,7 +110,7 @@ const PropertiesPage = () => {
             {/* Bedrooms */}
             <div>
               <Label htmlFor="beds" className="mb-2 block">
-                Minimum Bedrooms
+                Chambres minimum
               </Label>
               <div className="flex space-x-4">
                 {[0, 2, 3, 4, 5].map((num) => (
@@ -120,7 +120,7 @@ const PropertiesPage = () => {
                     size="sm"
                     onClick={() => setMinBeds(num)}
                   >
-                    {num === 0 ? "Any" : num + "+"}
+                    {num === 0 ? "Toutes" : num + "+"}
                   </Button>
                 ))}
               </div>
@@ -128,7 +128,7 @@ const PropertiesPage = () => {
 
             {/* Property Type */}
             <div>
-              <Label className="mb-2 block">Property Type</Label>
+              <Label className="mb-2 block">Type de propriété</Label>
               <div className="grid grid-cols-2 gap-2">
                 {propertyTypes.map((type) => (
                   <div key={type} className="flex items-center space-x-2">
@@ -153,7 +153,7 @@ const PropertiesPage = () => {
         {/* Results */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <p className="text-xl">Loading properties...</p>
+            <p className="text-xl">Chargement des propriétés...</p>
           </div>
         ) : error ? (
           <div className="flex justify-center items-center h-64">
@@ -191,10 +191,10 @@ const PropertiesPage = () => {
         ) : (
           <div className="text-center py-12">
             <h3 className="text-xl font-medium text-gray-900 mb-2">
-              No properties found
+              Aucune propriété trouvée
             </h3>
             <p className="text-gray-600">
-              Try adjusting your filters to see more results
+              Essayez d'ajuster vos filtres pour voir plus de résultats
             </p>
           </div>
         )}

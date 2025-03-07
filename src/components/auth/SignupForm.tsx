@@ -70,7 +70,7 @@ const SignupForm = ({
     <form onSubmit={handleSignup} className="space-y-4">
       <div className="space-y-2">
         <label htmlFor="username" className="text-sm font-medium">
-          Username
+          Nom d'utilisateur
         </label>
         <Input
           id="username"
@@ -78,12 +78,12 @@ const SignupForm = ({
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          placeholder="Choose a username"
+          placeholder="Choisissez un nom d'utilisateur"
         />
       </div>
       <div className="space-y-2">
         <label htmlFor="email" className="text-sm font-medium">
-          Email
+          E-mail
         </label>
         <Input
           id="email"
@@ -91,12 +91,12 @@ const SignupForm = ({
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          placeholder="Enter your email"
+          placeholder="Entrez votre e-mail"
         />
       </div>
       <div className="space-y-2">
         <label htmlFor="password" className="text-sm font-medium">
-          Password
+          Mot de passe
         </label>
         <Input
           id="password"
@@ -104,12 +104,12 @@ const SignupForm = ({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          placeholder="Create a password"
+          placeholder="Créez un mot de passe"
         />
       </div>
       <div className="space-y-2">
         <label htmlFor="confirmPassword" className="text-sm font-medium">
-          Confirm Password
+          Confirmer le mot de passe
         </label>
         <Input
           id="confirmPassword"
@@ -117,12 +117,12 @@ const SignupForm = ({
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
-          placeholder="Confirm your password"
+          placeholder="Confirmez votre mot de passe"
         />
       </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Creating Account..." : "Sign Up"}
+        {loading ? "Création du compte..." : "S'inscrire"}
       </Button>
     </form>
   );
@@ -133,13 +133,13 @@ const SignupForm = ({
         {formContent}
         {onLoginClick && (
           <p className="text-sm text-center text-gray-500 pt-4">
-            Already have an account?{" "}
+            Vous avez déjà un compte ?{" "}
             <button
               type="button"
               onClick={onLoginClick}
               className="text-primary hover:underline"
             >
-              Log in
+              Se connecter
             </button>
           </p>
         )}
@@ -150,19 +150,21 @@ const SignupForm = ({
   return (
     <Card className="w-[400px]">
       <CardHeader>
-        <CardTitle className="text-2xl">Create an Account</CardTitle>
-        <CardDescription>Sign up to access exclusive features</CardDescription>
+        <CardTitle className="text-2xl">Créer un compte</CardTitle>
+        <CardDescription>
+          Inscrivez-vous pour accéder aux fonctionnalités exclusives
+        </CardDescription>
       </CardHeader>
       <CardContent>{formContent}</CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-gray-500">
-          Already have an account?{" "}
+          Vous avez déjà un compte ?{" "}
           <button
             type="button"
             onClick={onLoginClick}
             className="text-primary hover:underline"
           >
-            Log in
+            Se connecter
           </button>
         </p>
       </CardFooter>

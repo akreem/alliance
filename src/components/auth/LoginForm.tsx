@@ -61,7 +61,7 @@ const LoginForm = ({
     <form onSubmit={handleLogin} className="space-y-4">
       <div className="space-y-2">
         <label htmlFor="username" className="text-sm font-medium">
-          Username
+          Nom d'utilisateur
         </label>
         <Input
           id="username"
@@ -69,12 +69,12 @@ const LoginForm = ({
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
-          placeholder="Enter your username"
+          placeholder="Entrez votre nom d'utilisateur"
         />
       </div>
       <div className="space-y-2">
         <label htmlFor="password" className="text-sm font-medium">
-          Password
+          Mot de passe
         </label>
         <Input
           id="password"
@@ -82,12 +82,12 @@ const LoginForm = ({
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          placeholder="Enter your password"
+          placeholder="Entrez votre mot de passe"
         />
       </div>
       {error && <p className="text-red-500 text-sm">{error}</p>}
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Logging in..." : "Log In"}
+        {loading ? "Connexion en cours..." : "Se connecter"}
       </Button>
     </form>
   );
@@ -98,13 +98,13 @@ const LoginForm = ({
         {formContent}
         {onSignupClick && (
           <p className="text-sm text-center text-gray-500 pt-4">
-            Don't have an account?{" "}
+            Vous n'avez pas de compte ?{" "}
             <button
               type="button"
               onClick={onSignupClick}
               className="text-primary hover:underline"
             >
-              Sign up
+              S'inscrire
             </button>
           </p>
         )}
@@ -115,19 +115,19 @@ const LoginForm = ({
   return (
     <Card className="w-[400px]">
       <CardHeader>
-        <CardTitle className="text-2xl">Welcome Back</CardTitle>
-        <CardDescription>Log in to your account</CardDescription>
+        <CardTitle className="text-2xl">Bienvenue</CardTitle>
+        <CardDescription>Connectez-vous à votre compte</CardDescription>
       </CardHeader>
       <CardContent>{formContent}</CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-gray-500">
-          Don't have an account?{" "}
+          Vous n'avez pas de compte ?{" "}
           <button
             type="button"
             onClick={onSignupClick}
             className="text-primary hover:underline"
           >
-            Sign up
+            S'inscrire
           </button>
         </p>
       </CardFooter>

@@ -22,7 +22,7 @@ const AboutPage = () => {
             transition={{ duration: 0.8 }}
             className="text-5xl md:text-6xl font-bold text-white mb-6"
           >
-            About Alliance Immobilier
+            À propos d'Alliance Immobilier
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -30,7 +30,7 @@ const AboutPage = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-xl md:text-2xl text-white/90 max-w-2xl"
           >
-            A legacy of excellence in luxury real estate
+            Un héritage d'excellence dans l'immobilier de luxe
           </motion.p>
         </div>
       </div>
@@ -47,20 +47,20 @@ const AboutPage = () => {
           >
             <div>
               <h2 className="text-4xl font-bold text-gray-900 mb-8">
-                Our Story
+                Notre Histoire
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                Founded in 2005, Alliance Immobilier has established itself as
-                the premier destination for high-end real estate. Our journey
-                began with a simple vision: to provide unparalleled service in
-                the luxury property market.
+                Fondée en 2005, Alliance Immobilier s'est imposée comme la
+                destination privilégiée pour l'immobilier haut de gamme. Notre
+                parcours a commencé avec une vision simple : offrir un service
+                inégalé dans le marché immobilier de luxe.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                Today, we are proud to be recognized as industry leaders, known
-                for our exceptional portfolio of properties and our commitment
-                to client satisfaction. Our team of experienced professionals
-                brings together decades of expertise in the luxury real estate
-                market.
+                Aujourd'hui, nous sommes fiers d'être reconnus comme des leaders
+                du secteur, connus pour notre portefeuille exceptionnel de
+                propriétés et notre engagement envers la satisfaction client.
+                Notre équipe de professionnels expérimentés rassemble des
+                décennies d'expertise dans le marché immobilier de luxe.
               </p>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-transform duration-500">
@@ -85,11 +85,12 @@ const AboutPage = () => {
             className="text-center mb-20"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Our Values
+              Nos Valeurs
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              At Alliance Immobilier, we are guided by a set of core values that
-              define who we are and how we operate.
+              Chez Alliance Immobilier, nous sommes guidés par un ensemble de
+              valeurs fondamentales qui définissent qui nous sommes et comment
+              nous opérons.
             </p>
           </motion.div>
 
@@ -98,17 +99,17 @@ const AboutPage = () => {
               {
                 title: "Excellence",
                 description:
-                  "We strive for excellence in everything we do, from property selection to client service.",
+                  "Nous visons l'excellence dans tout ce que nous faisons, de la sélection des propriétés au service client.",
               },
               {
-                title: "Integrity",
+                title: "Intégrité",
                 description:
-                  "We operate with the highest level of integrity, ensuring transparency and honesty in all our dealings.",
+                  "Nous opérons avec le plus haut niveau d'intégrité, assurant transparence et honnêteté dans toutes nos transactions.",
               },
               {
                 title: "Innovation",
                 description:
-                  "We embrace innovation, constantly seeking new ways to enhance our service and exceed expectations.",
+                  "Nous adoptons l'innovation, cherchant constamment de nouvelles façons d'améliorer notre service et de dépasser les attentes.",
               },
             ].map((value, index) => (
               <motion.div
@@ -139,10 +140,12 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="text-center mb-20"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">Our Team</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">
+              Notre Équipe
+            </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Meet the exceptional professionals who make Alliance Immobilier
-              the industry leader it is today.
+              Rencontrez les professionnels exceptionnels qui font d'Alliance
+              Immobilier le leader du secteur qu'elle est aujourd'hui.
             </p>
           </motion.div>
 
@@ -150,37 +153,37 @@ const AboutPage = () => {
             {[
               {
                 name: "Alexandra Reynolds",
-                role: "Founder & CEO",
+                role: "Fondatrice & PDG",
                 image:
                   "https://api.dicebear.com/7.x/avataaars/svg?seed=Alexandra&backgroundColor=b6e3f4",
               },
               {
                 name: "Michael Chen",
-                role: "Head of Acquisitions",
+                role: "Directeur des Acquisitions",
                 image:
                   "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael&backgroundColor=d1d4f9",
               },
               {
                 name: "Sophia Martinez",
-                role: "Senior Property Consultant",
+                role: "Consultante Immobilière Senior",
                 image:
                   "https://api.dicebear.com/7.x/avataaars/svg?seed=Sophia&backgroundColor=c0aede",
               },
               {
                 name: "James Wilson",
-                role: "Marketing Director",
+                role: "Directeur Marketing",
                 image:
                   "https://api.dicebear.com/7.x/avataaars/svg?seed=James&backgroundColor=b6e3f4",
               },
               {
                 name: "Olivia Thompson",
-                role: "Client Relations Manager",
+                role: "Responsable Relations Clients",
                 image:
                   "https://api.dicebear.com/7.x/avataaars/svg?seed=Olivia&backgroundColor=d1d4f9",
               },
               {
                 name: "David Kim",
-                role: "Financial Advisor",
+                role: "Conseiller Financier",
                 image:
                   "https://api.dicebear.com/7.x/avataaars/svg?seed=David&backgroundColor=c0aede",
               },
