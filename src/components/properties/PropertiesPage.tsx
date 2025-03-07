@@ -17,53 +17,96 @@ const PropertiesPage = () => {
 
   // Force fetch properties when component mounts
   useEffect(() => {
-    fetchProperties();
+    console.log("PropertiesPage: Fetching properties...");
+    fetchProperties().then(() => {
+      console.log("PropertiesPage: Properties fetch completed");
+    }).catch(err => {
+      console.error("PropertiesPage: Error fetching properties:", err);
+    });
   }, []);
+
   const [searchTerm, setSearchTerm] = useState("");
-  const [priceRange, setPriceRange] = useState([10000, 950000]);
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [minBeds, setMinBeds] = useState(0);
   const [propertyTypes, setPropertyTypes] = useState<string[]>([]);
 
   useEffect(() => {
-    // Force fetch properties on component mount
-    const fetchData = async () => {
-      await useProperties().fetchProperties();
-    };
-    fetchData();
-
+    console.log("Properties updated:", properties);
     if (properties.length > 0) {
-      setPropertyTypes([
-        ...new Set(properties.map((property) => property.type)),
-      ]);
+      // Extract unique property types
+      const types = [...new Set(properties.map((property) => property.type))];
+      console.log("Available property types:", types);
+      setPropertyTypes(types);
+      
+      // Log price ranges to debug
+      const prices = properties.map(p => p.priceValue || 0);
+      console.log("Price range in data:", Math.min(...prices), "to", Math.max(...prices));
     }
   }, [properties]);
 
   const filteredProperties = properties.filter((property) => {
+    // Ensure property has all required fields
+    if (!property || !property.title || !property.location) {
+      console.warn("Skipping property with missing data:", property);
+      return false;
+    }
+
     // Search term filter
     const matchesSearch =
       property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       property.location.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // Price range filter
+    // Price range filter - handle missing or string priceValue
+    let propertyPrice = 0;
+    if (typeof property.priceValue === 'number') {
+      propertyPrice = property.priceValue;
+    } else if (property.price) {
+      // Try to extract numeric value from price string
+      const priceMatch = property.price.match(/\d+/g);
+      if (priceMatch) {
+        propertyPrice = parseInt(priceMatch.join(''), 10);
+      }
+    }
+    
+    console.log(`Property ${property.id} price: ${propertyPrice}, Range: ${priceRange[0]}-${priceRange[1]}, Matches: ${propertyPrice >= priceRange[0] && propertyPrice <= priceRange[1]}`);
+    
     const matchesPrice =
-      property.priceValue >= priceRange[0] &&
-      property.priceValue <= priceRange[1];
+      propertyPrice >= priceRange[0] && propertyPrice <= priceRange[1];
 
-    // Property type filter
+    // Property type filter - handle missing type
+    const propertyType = property.type || "Unknown";
     const matchesType =
-      selectedTypes.length === 0 || selectedTypes.includes(property.type);
+      selectedTypes.length === 0 || selectedTypes.includes(propertyType);
 
-    // Beds filter
-    const matchesBeds = property.beds >= minBeds;
+    // Beds filter - handle missing beds
+    const propertyBeds = property.beds || 0;
+    const matchesBeds = propertyBeds >= minBeds;
 
-    return matchesSearch && matchesPrice && matchesType && matchesBeds;
+    // Log filtering results for debugging
+    const result = matchesSearch && matchesPrice && matchesType && matchesBeds;
+    if (!result) {
+      console.log(`Property ${property.id} filtered out: search=${matchesSearch}, price=${matchesPrice}, type=${matchesType}, beds=${matchesBeds}`);
+    }
+
+    return result;
   });
+
+  console.log("Filtered properties:", filteredProperties.length, "out of", properties.length);
 
   const handleTypeToggle = (type: string) => {
     setSelectedTypes((prev) =>
       prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type],
     );
+  };
+
+  // Add a function to reset all filters
+  const resetFilters = () => {
+    setSearchTerm("");
+    setPriceRange([0, 1000000]);
+    setSelectedTypes([]);
+    setMinBeds(0);
+    console.log("Filters reset");
   };
 
   return (
@@ -86,6 +129,16 @@ const PropertiesPage = () => {
 
         {/* Filters */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-10">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-semibold">Filtres</h2>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={resetFilters}
+            >
+              Réinitialiser les filtres
+            </Button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Search */}
             <div>
@@ -105,10 +158,10 @@ const PropertiesPage = () => {
               <Label className="mb-2 block">Fourchette de prix</Label>
               <div className="pt-4">
                 <Slider
-                  defaultValue={[10000, 950000]}
-                  max={950000}
-                  min={10000}
-                  step={1000}
+                  defaultValue={[0, 1000000]}
+                  max={1000000}
+                  min={0}
+                  step={10000}
                   value={priceRange}
                   onValueChange={setPriceRange}
                 />
@@ -210,10 +263,10 @@ const PropertiesPage = () => {
             </p>
           </div>
         )}
-      </div>
 
-      {/* Property Map Section */}
-      <PropertyMap />
+        {/* Property Map Section */}
+        <PropertyMap properties={filteredProperties} />
+      </div>
     </div>
   );
 };

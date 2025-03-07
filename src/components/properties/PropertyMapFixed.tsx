@@ -163,9 +163,8 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
       // Create popup with RTL support
       const popup = new mapboxgl.Popup({
         offset: 25,
-        closeButton: true,
+        closeButton: true, // Add close button for better usability
         closeOnClick: false,
-        className: 'property-popup'
       }).setHTML(`
           <div class="p-3 min-w-[220px]">
             <div class="mb-2 rounded-md overflow-hidden">
@@ -202,32 +201,14 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
         popup.addTo(map.current!);
       });
 
-      // Keep popup open when hovering over the popup itself
-      popup.getElement()?.addEventListener('mouseenter', () => {
-        // Keep popup open when mouse enters the popup
-        popup._onMouseEnter = function() { return; };
-      });
-
-      // Remove popup when mouse leaves marker (but not when on popup)
-      markerEl.addEventListener("mouseleave", (e) => {
-        // Check if mouse is moving to the popup
-        const toElement = e.relatedTarget;
-        if (toElement && popup.getElement()?.contains(toElement as Node)) {
-          // Mouse moved to popup, don't remove it
-          return;
-        }
-        
-        // Only remove if we're not zoomed in on this location
-        if (map.current && map.current.getZoom() < 12) {
-          // Set a small timeout to allow mouse to move to popup
-          setTimeout(() => {
-            // Check if mouse is over popup before removing
-            if (!popup.getElement()?.matches(':hover')) {
-              popup.remove();
-            }
-          }, 100);
-        }
-      });
+      // Keep popup open when mouse is over it
+      const popupEl = popup.getElement();
+      if (popupEl) {
+        popupEl.addEventListener('mouseenter', () => {
+          // Prevent popup from closing when mouse is over it
+          popup._onMouseLeave = function() { return; };
+        });
+      }
     });
   };
 
@@ -242,7 +223,7 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
       container: mapContainer.current,
       style: "mapbox://styles/akreem/cm7btkdgr006t01qyevls98b5",
       center: [10.1815, 36.8065], // center on Tunis
-      zoom: 9, // Adjust zoom level to be closer
+      zoom: 9, // Closer zoom level
       locale: "fr", // Use French locale which is closer to Arabic for Tunisia
     });
 
@@ -251,12 +232,13 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
 
     // Add markers when map loads
     map.current.on("load", () => {
-      addMarkers(propertyLocations);
       setMapInitialized(true);
+      addMarkers(propertyLocations);
     });
 
-    // Cleanup on unmount
+    // Clean up on unmount
     return () => {
+      clearMarkers();
       if (map.current) {
         map.current.remove();
         map.current = null;
@@ -266,19 +248,83 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
 
   // Update markers when properties change
   useEffect(() => {
-    if (map.current && mapInitialized) {
+    if (mapInitialized && map.current) {
       addMarkers(propertyLocations);
+      
+      // Center the map on Tunisia
+      if (propertyLocations.length > 0 && !map.current.isMoving()) {
+        map.current.setCenter([10.1815, 36.8065]); // Center on Tunisia
+      }
     }
-  }, [properties, apiProperties, mapInitialized]);
+  }, [propertyLocations, mapInitialized]);
 
   return (
-    <section className="mt-16">
-      <h2 className="text-2xl font-bold mb-6">Carte des propriétés</h2>
-      <div
-        ref={mapContainer}
-        className="w-full h-[600px] rounded-lg overflow-hidden"
-      >
-        {/* Map will be rendered here */}
+    <section className="py-16 bg-white">
+      <div className="max-w-7xl mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            Nos Propriétés en Tunisie
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Explorez nos propriétés exclusives dans les emplacements les plus
+            recherchés de Tunisie
+          </p>
+        </motion.div>
+
+        {/* Mapbox container */}
+        <div
+          ref={mapContainer}
+          className="w-full h-[600px] rounded-xl overflow-hidden shadow-xl mb-10"
+          style={{ position: "relative" }}
+        />
+
+        {/* Property list below map */}
+        <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {propertyLocations.map((location, index) => (
+            <motion.div
+              key={location.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+              onClick={() => {
+                if (map.current && popupRefs.current[location.id]) {
+                  // Close all popups first
+                  Object.values(popupRefs.current).forEach((p) => p.remove());
+                  // Show this popup and zoom to location
+                  popupRefs.current[location.id].addTo(map.current);
+                  map.current.flyTo({
+                    center: [location.lng, location.lat],
+                    zoom: 16,
+                    speed: 1.2,
+                    essential: true,
+                  });
+                }
+              }}
+            >
+              <Link to={`/property/${location.id}`} className="block">
+                <div className="flex items-center mb-2">
+                  <MapPin className="h-5 w-5 text-primary mr-2" />
+                  <h3 className="font-semibold">{location.location}</h3>
+                </div>
+                <p className="text-gray-600 mb-2">{location.name}</p>
+                <div className="flex justify-between items-center">
+                  <span className="font-bold text-primary">
+                    {location.price}
+                  </span>
+                  <span className="text-sm text-gray-500">{location.type}</span>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Add CSS for custom markers */}
@@ -332,9 +378,14 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
         .mapboxgl-popup-content a {
           font-family: "Arial", sans-serif;
         }
+        .mapboxgl-popup-close-button {
+          font-size: 16px;
+          color: #222d65;
+          padding: 5px;
+        }
       `}</style>
     </section>
   );
 };
 
-export default PropertyMap;
+export default PropertyMap; 

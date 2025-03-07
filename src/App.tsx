@@ -18,6 +18,7 @@ import AuthPage from "./components/auth/AuthPage";
 import AccountManagement from "./components/auth/AccountManagement";
 import Navbar from "./components/navigation/Navbar";
 import routes from "tempo-routes";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 function App() {
   return (
@@ -26,21 +27,22 @@ function App() {
         {window.location.pathname !== "/" &&
           !window.location.pathname.startsWith("/admin") && <Navbar />}
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<ContactPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/properties" element={<PropertiesPage />} />
-          <Route path="/property/:id" element={<PropertyDetail />} />
-          <Route path="/properties/:id" element={<PropertyDetail />} />
-          <Route path="/property/1" element={<PropertyDetails1 />} />
+          <Route path="/" element={<ErrorBoundary><Home /></ErrorBoundary>} />
+          <Route path="/contact" element={<ErrorBoundary><ContactPage /></ErrorBoundary>} />
+          <Route path="/about" element={<ErrorBoundary><AboutPage /></ErrorBoundary>} />
+          <Route path="/properties" element={<ErrorBoundary><PropertiesPage /></ErrorBoundary>} />
+          <Route path="/property/:id" element={<ErrorBoundary><PropertyDetail /></ErrorBoundary>} />
+          <Route path="/properties/:id" element={<ErrorBoundary><PropertyDetail /></ErrorBoundary>} />
+          {/* The following static routes are now commented out as they're no longer needed */}
+          {/* <Route path="/property/1" element={<PropertyDetails1 />} />
           <Route path="/property/2" element={<PropertyDetails2 />} />
           <Route path="/property/3" element={<PropertyDetails3 />} />
           <Route path="/property/4" element={<PropertyDetails4 />} />
-          <Route path="/property/5" element={<PropertyDetails5 />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/account" element={<AccountManagement />} />
+          <Route path="/property/5" element={<PropertyDetails5 />} /> */}
+          <Route path="/admin/login" element={<ErrorBoundary><AdminLogin /></ErrorBoundary>} />
+          <Route path="/admin/dashboard" element={<ErrorBoundary><AdminDashboard /></ErrorBoundary>} />
+          <Route path="/auth" element={<ErrorBoundary><AuthPage /></ErrorBoundary>} />
+          <Route path="/account" element={<ErrorBoundary><AccountManagement /></ErrorBoundary>} />
         </Routes>
         {import.meta.env.VITE_TEMPO === "true" && useRoutes(routes)}
       </div>

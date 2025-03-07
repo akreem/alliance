@@ -30,6 +30,16 @@ const PropertyCard = ({
   isFavorite = false,
   onFavoriteClick = () => {},
 }: PropertyCardProps) => {
+  console.log(`Rendering PropertyCard for property ${id}: ${title}`);
+  
+  // Ensure we have valid data for display
+  const displayTitle = title || "Property Title";
+  const displayLocation = location || "Location";
+  const displayPrice = price || "Price on request";
+  const displayBeds = beds || 0;
+  const displayBaths = baths || 0;
+  const displaySqft = sqft || 0;
+  
   return (
     <Card className="w-[380px] h-[480px] overflow-hidden group bg-white dark:bg-gray-800 transition-all duration-300 hover:shadow-xl">
       <Link
@@ -39,13 +49,14 @@ const PropertyCard = ({
           propertyData: {
             id,
             image,
-            title,
-            price,
-            location,
-            beds,
-            baths,
-            sqft,
+            title: displayTitle,
+            price: displayPrice,
+            location: displayLocation,
+            beds: displayBeds,
+            baths: displayBaths,
+            sqft: displaySqft,
             isFavorite,
+            type: "Villa", // Default type if not provided
           },
         }}
       >
@@ -55,7 +66,7 @@ const PropertyCard = ({
               image ||
               "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2075&q=80"
             }
-            alt={title}
+            alt={displayTitle}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
           />
           <Button
@@ -72,7 +83,7 @@ const PropertyCard = ({
             />
           </Button>
           <Badge className="absolute bottom-4 left-4 bg-white/80 text-black">
-            {price}
+            {displayPrice}
           </Badge>
         </div>
       </Link>
@@ -84,26 +95,27 @@ const PropertyCard = ({
             propertyData: {
               id,
               image,
-              title,
-              price,
-              location,
-              beds,
-              baths,
-              sqft,
+              title: displayTitle,
+              price: displayPrice,
+              location: displayLocation,
+              beds: displayBeds,
+              baths: displayBaths,
+              sqft: displaySqft,
               isFavorite,
+              type: "Villa", // Default type if not provided
             },
           }}
         >
           <h3 className="text-xl font-semibold mb-2 dark:text-white">
-            {title}
+            {displayTitle}
           </h3>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">{location}</p>
+          <p className="text-gray-600 dark:text-gray-300 mb-4">{displayLocation}</p>
         </Link>
       </CardContent>
       <CardFooter className="px-6 py-4 border-t dark:border-gray-700 flex justify-between text-sm text-gray-600 dark:text-gray-300">
-        <span>{beds} Chambres</span>
-        <span>{baths} Salles de bain</span>
-        <span>{sqft.toLocaleString()} m²</span>
+        <span>{displayBeds} Chambres</span>
+        <span>{displayBaths} Salles de bain</span>
+        <span>{displaySqft.toLocaleString()} m²</span>
       </CardFooter>
     </Card>
   );

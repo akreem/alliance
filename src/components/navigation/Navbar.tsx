@@ -107,13 +107,11 @@ const Navbar = ({
             "bg-transparent":
               !isScrolled &&
               !isMobileMenuOpen &&
-              (window.location.pathname === "/" ||
-                window.location.pathname === "/about"),
+              window.location.pathname === "/",
             "bg-white dark:bg-gray-900 shadow-md":
               isScrolled ||
               isMobileMenuOpen ||
-              (window.location.pathname !== "/" &&
-                window.location.pathname !== "/about"),
+              window.location.pathname !== "/",
           },
         )}
       >
@@ -126,13 +124,11 @@ const Navbar = ({
                 "text-white":
                   !isScrolled &&
                   !isMobileMenuOpen &&
-                  (window.location.pathname === "/" ||
-                    window.location.pathname === "/about"),
+                  window.location.pathname === "/",
                 "text-gray-900 dark:text-white":
                   isScrolled ||
                   isMobileMenuOpen ||
-                  (window.location.pathname !== "/" &&
-                    window.location.pathname !== "/about"),
+                  window.location.pathname !== "/",
               })}
               onClick={(e) => {
                 e.preventDefault();
@@ -162,13 +158,11 @@ const Navbar = ({
                         "text-white":
                           !isScrolled &&
                           !isMobileMenuOpen &&
-                          (window.location.pathname === "/" ||
-                            window.location.pathname === "/about"),
+                          window.location.pathname === "/",
                         "text-gray-900 dark:text-white":
                           isScrolled ||
                           isMobileMenuOpen ||
-                          (window.location.pathname !== "/" &&
-                            window.location.pathname !== "/about"),
+                          window.location.pathname !== "/",
                       },
                     )}
                   >
@@ -249,25 +243,19 @@ const Navbar = ({
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
-                  <div className="flex items-center space-x-2">
+                  <div className="flex space-x-2">
                     <Button
-                      variant="default"
-                      className="rounded-full bg-blue-600 hover:bg-blue-700"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openLoginDialog();
-                      }}
+                      variant={!isScrolled && window.location.pathname === "/" ? "default" : "outline"}
+                      size="sm"
+                      onClick={openLoginDialog}
+                      className={cn({
+                        "bg-blue-600 hover:bg-blue-700 text-white border-transparent":
+                          !isScrolled && window.location.pathname === "/",
+                      })}
                     >
                       Connexion
                     </Button>
-                    <Button
-                      variant="outline"
-                      className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-gray-800"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openSignupDialog();
-                      }}
-                    >
+                    <Button size="sm" onClick={openSignupDialog}>
                       Inscription
                     </Button>
                   </div>
@@ -276,9 +264,7 @@ const Navbar = ({
             </div>
 
             {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
+            <button
               className="md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
@@ -287,102 +273,90 @@ const Navbar = ({
                   "text-white":
                     !isScrolled &&
                     !isMobileMenuOpen &&
-                    (window.location.pathname === "/" ||
-                      window.location.pathname === "/about"),
+                    window.location.pathname === "/",
                   "text-gray-900 dark:text-white":
                     isScrolled ||
                     isMobileMenuOpen ||
-                    (window.location.pathname !== "/" &&
-                      window.location.pathname !== "/about"),
+                    window.location.pathname !== "/",
                 })}
               />
-            </Button>
+            </button>
           </div>
+        </div>
 
-          {/* Mobile Menu */}
-          {isMobileMenuOpen && (
-            <div className="md:hidden pb-4">
-              {menuItems.map((item, index) => {
-                // Only show Admin link if user is staff
-                if (
-                  item.href === "/admin/dashboard" &&
-                  (!userAuthenticated || !getCurrentUser()?.isStaff)
-                ) {
-                  return null;
-                }
-                return (
-                  <a
-                    key={index}
-                    href={item.href}
-                    className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-gray-600 dark:hover:text-gray-300"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </a>
-                );
-              })}
-
-              <div className="flex items-center justify-between border-t dark:border-gray-700 pt-2 mt-2">
-                <ThemeToggle />
-                {userAuthenticated ? (
-                  <div className="flex flex-col space-y-2 w-full pl-4">
-                    <div className="flex items-center py-2 text-gray-900 dark:text-white text-sm font-medium">
-                      <User className="h-4 w-4 mr-2" />
-                      <span>{username}</span>
-                    </div>
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white dark:bg-gray-900 shadow-lg">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex flex-col space-y-4">
+                {menuItems.map((item, index) => {
+                  // Only show Admin link if user is staff
+                  if (
+                    item.href === "/admin/dashboard" &&
+                    (!userAuthenticated || !getCurrentUser()?.isStaff)
+                  ) {
+                    return null;
+                  }
+                  return (
                     <a
-                      href="/account"
-                      className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center"
+                      key={index}
+                      href={item.href}
+                      className="text-gray-900 dark:text-white font-medium py-2"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <Settings className="h-4 w-4 mr-2" /> Mon compte
+                      {item.label}
                     </a>
-                    {getCurrentUser()?.isStaff && (
-                      <a
-                        href="/admin/dashboard"
-                        className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center"
-                        onClick={() => setIsMobileMenuOpen(false)}
+                  );
+                })}
+
+                <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700">
+                  <ThemeToggle />
+
+                  {userAuthenticated ? (
+                    <div className="flex items-center space-x-2">
+                      <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
+                        <User className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {username}
+                        </p>
+                        <button
+                          onClick={handleLogout}
+                          className="text-sm text-red-500"
+                        >
+                          Déconnexion
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex space-x-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          openLoginDialog();
+                        }}
                       >
-                        <Settings className="h-4 w-4 mr-2" /> Administration
-                      </a>
-                    )}
-                    <button
-                      onClick={handleLogout}
-                      className="block py-2 text-red-500 text-sm font-medium hover:text-red-600 w-full text-left flex items-center"
-                    >
-                      <LogOut className="h-4 w-4 mr-2" /> Déconnexion
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex flex-col space-y-2 w-full pl-4">
-                    <Button
-                      variant="default"
-                      className="rounded-full bg-blue-600 hover:bg-blue-700 w-full"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openLoginDialog();
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      Connexion
-                    </Button>
-                    <Button
-                      variant="outline"
-                      className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-gray-800 w-full"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        openSignupDialog();
-                        setIsMobileMenuOpen(false);
-                      }}
-                    >
-                      Inscription
-                    </Button>
-                  </div>
-                )}
+                        Connexion
+                      </Button>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          openSignupDialog();
+                        }}
+                      >
+                        Inscription
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </nav>
 
       {/* Auth Dialog */}
@@ -390,6 +364,7 @@ const Navbar = ({
         open={authDialogOpen}
         onOpenChange={setAuthDialogOpen}
         defaultTab={authDialogTab}
+        onSuccess={handleAuthSuccess}
       />
     </>
   );

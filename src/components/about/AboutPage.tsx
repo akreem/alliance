@@ -4,10 +4,12 @@ import Navbar from "../navigation/Navbar";
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
       <Navbar />
+      <div className="h-20"></div>
+
       {/* Hero Section */}
-      <div className="relative h-[500px] bg-gray-900">
+      <div className="relative h-[300px] bg-gray-900 mb-16">
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/50">
           <img
             src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80"
@@ -20,7 +22,7 @@ const AboutPage = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-5xl md:text-6xl font-bold text-white mb-6"
+            className="text-5xl font-bold text-white mb-4"
           >
             À propos d'Alliance Immobilier
           </motion.h1>
@@ -28,7 +30,7 @@ const AboutPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-white/90 max-w-2xl"
+            className="text-xl text-white/90 max-w-2xl"
           >
             Un héritage d'excellence dans l'immobilier de luxe
           </motion.p>
@@ -36,7 +38,7 @@ const AboutPage = () => {
       </div>
 
       {/* Our Story */}
-      <section className="py-24 px-4 bg-white dark:bg-gray-900">
+      <section className="py-24 px-4">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -49,13 +51,13 @@ const AboutPage = () => {
               <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-8">
                 Notre Histoire
               </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 mb-8 leading-relaxed">
                 Fondée en 2005, Alliance Immobilier s'est imposée comme la
                 destination privilégiée pour l'immobilier haut de gamme. Notre
                 parcours a commencé avec une vision simple : offrir un service
                 inégalé dans le marché immobilier de luxe.
               </p>
-              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+              <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                 Aujourd'hui, nous sommes fiers d'être reconnus comme des leaders
                 du secteur, connus pour notre portefeuille exceptionnel de
                 propriétés et notre engagement envers la satisfaction client.
@@ -75,7 +77,7 @@ const AboutPage = () => {
       </section>
 
       {/* Our Values */}
-      <section className="py-24 px-4 bg-gray-50 dark:bg-gray-800">
+      <section className="py-24 px-4 bg-gray-100 dark:bg-gray-800">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
@@ -87,7 +89,7 @@ const AboutPage = () => {
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Nos Valeurs
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
               Chez Alliance Immobilier, nous sommes guidés par un ensemble de
               valeurs fondamentales qui définissent qui nous sommes et comment
               nous opérons.
@@ -123,7 +125,7 @@ const AboutPage = () => {
                 <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
                   {value.title}
                 </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-300">
+                <p className="text-lg text-gray-700 dark:text-gray-300">
                   {value.description}
                 </p>
               </motion.div>
@@ -145,7 +147,7 @@ const AboutPage = () => {
             <h2 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
               Notre Équipe
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
               Rencontrez les professionnels exceptionnels qui font d'Alliance
               Immobilier le leader du secteur qu'elle est aujourd'hui.
             </p>
@@ -208,7 +210,7 @@ const AboutPage = () => {
                 <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                   {member.name}
                 </h3>
-                <p className="text-lg text-gray-600 dark:text-gray-300">
+                <p className="text-lg text-gray-700 dark:text-gray-300">
                   {member.role}
                 </p>
               </motion.div>

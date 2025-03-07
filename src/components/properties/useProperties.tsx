@@ -14,12 +14,21 @@ export const useProperties = () => {
   const fetchProperties = async () => {
     setLoading(true);
     try {
+      console.log("useProperties: Calling getProperties API...");
       const data = await getProperties();
+      console.log(`useProperties: API response with ${data.length} properties`);
+      
+      if (data.length === 0) {
+        console.warn("useProperties: No properties returned from API");
+      }
+      
       setProperties(data);
       setError(null);
+      return data;
     } catch (err) {
+      console.error("useProperties: Error in fetchProperties:", err);
       setError("Failed to fetch properties");
-      console.error(err);
+      throw err;
     } finally {
       setLoading(false);
     }

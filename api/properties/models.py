@@ -1,5 +1,13 @@
 from django.db import models
 from django.utils.text import slugify
+import os
+import uuid
+
+def get_image_path(instance, filename):
+    """Generate a unique path for uploaded property images"""
+    ext = filename.split('.')[-1]
+    filename = f"{uuid.uuid4()}.{ext}"
+    return os.path.join('properties', str(instance.property.id), filename)
 
 class Property(models.Model):
     PROPERTY_TYPES = [
@@ -48,11 +56,17 @@ class PropertyFeature(models.Model):
 
 class PropertyImage(models.Model):
     property = models.ForeignKey(Property, related_name='images', on_delete=models.CASCADE)
-    image_url = models.CharField(max_length=255)
+    image = models.ImageField(upload_to=get_image_path)
+    image_url = models.CharField(max_length=255, blank=True, null=True)
     is_primary = models.BooleanField(default=False)
     
     def __str__(self):
         return f"{self.property.title} - {'Primary' if self.is_primary else 'Secondary'}"
+    
+    def save(self, *args, **kwargs):
+        if self.image and not self.image_url:
+            self.image_url = self.image.url
+        super().save(*args, **kwargs)
 
 class Agent(models.Model):
     name = models.CharField(max_length=255)

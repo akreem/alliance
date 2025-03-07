@@ -16,11 +16,15 @@ const FeaturedProperties = ({
 
   // Make sure we have the latest properties
   useEffect(() => {
+    console.log("FeaturedProperties: Fetching properties...");
     fetchProperties();
   }, []);
 
   // Use provided properties or fetched properties
   const displayProperties = propProperties || properties;
+  
+  console.log("FeaturedProperties: Display properties:", displayProperties);
+  
   return (
     <section className="w-full min-h-screen bg-gray-50 dark:bg-gray-900 py-20 px-4">
       <div className="max-w-7xl mx-auto">
@@ -41,13 +45,13 @@ const FeaturedProperties = ({
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
-            <p className="text-xl">Loading properties...</p>
+            <p className="text-xl">Chargement des propriétés...</p>
           </div>
         ) : error ? (
           <div className="flex justify-center items-center h-64">
             <p className="text-xl text-red-500">{error}</p>
           </div>
-        ) : (
+        ) : displayProperties && displayProperties.length > 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -56,7 +60,7 @@ const FeaturedProperties = ({
           >
             {displayProperties.map((property, index) => (
               <motion.div
-                key={property.id}
+                key={property.id || index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -76,6 +80,10 @@ const FeaturedProperties = ({
               </motion.div>
             ))}
           </motion.div>
+        ) : (
+          <div className="flex justify-center items-center h-64">
+            <p className="text-xl">Aucune propriété disponible pour le moment</p>
+          </div>
         )}
       </div>
     </section>

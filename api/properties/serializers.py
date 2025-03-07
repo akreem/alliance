@@ -9,7 +9,29 @@ class PropertyFeatureSerializer(serializers.ModelSerializer):
 class PropertyImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = PropertyImage
-        fields = ['image_url', 'is_primary']
+        fields = ['id', 'image', 'image_url', 'is_primary']
+
+class PropertyImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PropertyImage
+        fields = ['image', 'is_primary']
+        
+    def create(self, validated_data):
+        property_id = self.context.get('property_id')
+        if not property_id:
+            raise serializers.ValidationError("Property ID is required")
+        
+        try:
+            property_obj = Property.objects.get(id=property_id)
+        except Property.DoesNotExist:
+            raise serializers.ValidationError("Property not found")
+        
+        # If this is a primary image, set all other images to non-primary
+        if validated_data.get('is_primary', False):
+            PropertyImage.objects.filter(property=property_obj, is_primary=True).update(is_primary=False)
+        
+        # Create the new image
+        return PropertyImage.objects.create(property=property_obj, **validated_data)
 
 class AgentSerializer(serializers.ModelSerializer):
     class Meta:

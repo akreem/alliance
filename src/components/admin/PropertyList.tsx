@@ -9,19 +9,20 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { Pencil, Trash2, Eye } from "lucide-react";
+import { Pencil, Trash2, Eye, Image as ImageIcon } from "lucide-react";
 import { getProperties, deleteProperty, Property } from "@/services/api";
 import PropertyForm from "./PropertyForm";
+import PropertyImageManager from "./PropertyImageManager";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 
 const PropertyList = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [editingProperty, setEditingProperty] = useState<Property | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [viewingProperty, setViewingProperty] = useState<Property | null>(null);
-  const [isViewDialogOpen, setIsViewDialogOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
+  const [imageDialogOpen, setImageDialogOpen] = useState(false);
+  const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
 
   const fetchProperties = async () => {
     setLoading(true);
@@ -41,17 +42,22 @@ const PropertyList = () => {
     fetchProperties();
   }, []);
 
-  const handleEdit = (property: Property) => {
-    setEditingProperty(property);
-    setIsDialogOpen(true);
+  const handleEditClick = (property: Property) => {
+    setSelectedProperty(property);
+    setEditDialogOpen(true);
   };
 
-  const handleView = (property: Property) => {
-    setViewingProperty(property);
-    setIsViewDialogOpen(true);
+  const handleViewClick = (property: Property) => {
+    setSelectedProperty(property);
+    setViewDialogOpen(true);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleImagesClick = (property: Property) => {
+    setSelectedProperty(property);
+    setImageDialogOpen(true);
+  };
+
+  const handleDeleteClick = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this property?")) {
       try {
         await deleteProperty(id);
@@ -62,9 +68,14 @@ const PropertyList = () => {
     }
   };
 
-  const handleFormSuccess = () => {
-    setIsDialogOpen(false);
+  const handleEditSuccess = () => {
+    setEditDialogOpen(false);
     fetchProperties();
+  };
+
+  const handleImageSuccess = () => {
+    fetchProperties();
+    // Keep the dialog open to allow multiple image updates
   };
 
   if (loading) {
@@ -82,7 +93,12 @@ const PropertyList = () => {
   return (
     <Card>
       <CardContent className="p-6">
-        <h2 className="text-2xl font-bold mb-6">Manage Properties</h2>
+        <div className="flex justify-between items-center">
+          <h2 className="text-2xl font-bold">Properties</h2>
+          <Button onClick={() => { setSelectedProperty(null); setEditDialogOpen(true); }}>
+            Add Property
+          </Button>
+        </div>
 
         {properties.length === 0 ? (
           <div className="text-center py-8">
@@ -105,11 +121,17 @@ const PropertyList = () => {
                 {properties.map((property) => (
                   <TableRow key={property.id}>
                     <TableCell>
-                      <img
-                        src={property.image}
-                        alt={property.title}
-                        className="w-16 h-16 object-cover rounded-md"
-                      />
+                      {property.image ? (
+                        <img
+                          src={property.image}
+                          alt={property.title}
+                          className="w-16 h-16 object-cover rounded-md"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
+                          <span className="text-gray-500 text-xs">No image</span>
+                        </div>
+                      )}
                     </TableCell>
                     <TableCell className="font-medium">
                       {property.title}
@@ -122,21 +144,29 @@ const PropertyList = () => {
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => handleView(property)}
+                          onClick={() => handleViewClick(property)}
                         >
                           <Eye className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => handleEdit(property)}
+                          onClick={() => handleEditClick(property)}
                         >
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
                           variant="outline"
                           size="icon"
-                          onClick={() => handleDelete(property.id)}
+                          onClick={() => handleImagesClick(property)}
+                        >
+                          <ImageIcon className="h-4 w-4 mr-1" />
+                          Images
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          onClick={() => handleDeleteClick(property.id)}
                         >
                           <Trash2 className="h-4 w-4 text-red-500" />
                         </Button>
@@ -151,67 +181,67 @@ const PropertyList = () => {
       </CardContent>
 
       {/* Edit Property Dialog */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
-            <DialogTitle>Edit Property</DialogTitle>
+            <DialogTitle>
+              {selectedProperty ? "Edit Property" : "Add Property"}
+            </DialogTitle>
           </DialogHeader>
-          {editingProperty && (
-            <PropertyForm
-              property={editingProperty}
-              onSuccess={handleFormSuccess}
-              onCancel={() => setIsDialogOpen(false)}
-            />
-          )}
+          <PropertyForm
+            property={selectedProperty || undefined}
+            onSuccess={handleEditSuccess}
+            onCancel={() => setEditDialogOpen(false)}
+          />
         </DialogContent>
       </Dialog>
 
       {/* View Property Dialog */}
-      <Dialog open={isViewDialogOpen} onOpenChange={setIsViewDialogOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+      <Dialog open={viewDialogOpen} onOpenChange={setViewDialogOpen}>
+        <DialogContent className="max-w-4xl">
           <DialogHeader>
             <DialogTitle>Property Details</DialogTitle>
           </DialogHeader>
-          {viewingProperty && (
+          {selectedProperty && (
             <div className="space-y-6 py-4">
               <div className="grid grid-cols-2 gap-6">
                 <div>
                   <img
-                    src={viewingProperty.image}
-                    alt={viewingProperty.title}
+                    src={selectedProperty.image}
+                    alt={selectedProperty.title}
                     className="w-full h-64 object-cover rounded-lg"
                   />
                 </div>
                 <div className="space-y-4">
                   <h3 className="text-2xl font-bold">
-                    {viewingProperty.title}
+                    {selectedProperty.title}
                   </h3>
                   <p className="text-xl font-semibold text-primary">
-                    {viewingProperty.price}
+                    {selectedProperty.price}
                   </p>
-                  <p className="text-gray-600">{viewingProperty.location}</p>
+                  <p className="text-gray-600">{selectedProperty.location}</p>
                   <div className="flex space-x-4 text-gray-600">
-                    <span>{viewingProperty.beds} Beds</span>
-                    <span>{viewingProperty.baths} Baths</span>
-                    <span>{viewingProperty.sqft} Sq Ft</span>
+                    <span>{selectedProperty.beds} Beds</span>
+                    <span>{selectedProperty.baths} Baths</span>
+                    <span>{selectedProperty.sqft} Sq Ft</span>
                   </div>
                   <div className="inline-block bg-primary/10 text-primary px-3 py-1 rounded-full">
-                    {viewingProperty.type}
+                    {selectedProperty.type}
                   </div>
                 </div>
               </div>
 
               <div>
                 <h4 className="text-lg font-semibold mb-2">Description</h4>
-                <p className="text-gray-600">{viewingProperty.description}</p>
+                <p className="text-gray-600">{selectedProperty.description}</p>
               </div>
 
-              {viewingProperty.features &&
-                viewingProperty.features.length > 0 && (
+              {selectedProperty.features &&
+                selectedProperty.features.length > 0 && (
                   <div>
                     <h4 className="text-lg font-semibold mb-2">Features</h4>
                     <ul className="grid grid-cols-2 gap-2">
-                      {viewingProperty.features.map((feature, index) => (
+                      {selectedProperty.features.map((feature, index) => (
                         <li key={index} className="flex items-center">
                           <div className="h-2 w-2 rounded-full bg-primary mr-2"></div>
                           <span>{feature}</span>
@@ -221,27 +251,42 @@ const PropertyList = () => {
                   </div>
                 )}
 
-              {viewingProperty.agent && (
+              {selectedProperty.agent && (
                 <div>
                   <h4 className="text-lg font-semibold mb-2">Agent</h4>
                   <div className="flex items-center">
                     <img
-                      src={viewingProperty.agent.image}
-                      alt={viewingProperty.agent.name}
+                      src={selectedProperty.agent.image}
+                      alt={selectedProperty.agent.name}
                       className="w-12 h-12 rounded-full mr-4"
                     />
                     <div>
                       <p className="font-medium">
-                        {viewingProperty.agent.name}
+                        {selectedProperty.agent.name}
                       </p>
                       <p className="text-gray-600 text-sm">
-                        {viewingProperty.agent.email}
+                        {selectedProperty.agent.email}
                       </p>
                     </div>
                   </div>
                 </div>
               )}
             </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Manage Property Images Dialog */}
+      <Dialog open={imageDialogOpen} onOpenChange={setImageDialogOpen}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Manage Property Images</DialogTitle>
+          </DialogHeader>
+          {selectedProperty && (
+            <PropertyImageManager
+              property={selectedProperty}
+              onSuccess={handleImageSuccess}
+            />
           )}
         </DialogContent>
       </Dialog>

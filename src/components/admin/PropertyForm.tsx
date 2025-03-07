@@ -13,10 +13,14 @@ import {
 import {
   createProperty,
   updateProperty,
+  updatePropertyImages,
   Property,
   getAgents,
   Agent,
 } from "@/services/api";
+import { Card } from "../ui/card";
+import { AlertCircle, X } from "lucide-react";
+import { Alert, AlertDescription } from "../ui/alert";
 
 interface PropertyFormProps {
   property?: Property;
@@ -47,6 +51,8 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
   const [additionalImages, setAdditionalImages] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   useEffect(() => {
     // Fetch agents
@@ -106,10 +112,59 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
     }));
   };
 
+  const validateImageUrl = (url: string): boolean => {
+    if (!url) return false;
+    try {
+      new URL(url);
+      return url.match(/\.(jpg|jpeg|png|webp|avif|gif)$/) !== null;
+    } catch {
+      return false;
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>, isMainImage: boolean = false) => {
+    const { value } = e.target;
+    setImageError(null);
+
+    if (value && !validateImageUrl(value)) {
+      setImageError("Please enter a valid image URL (ending in .jpg, .png, .webp, etc.)");
+      return;
+    }
+
+    if (isMainImage) {
+      setFormData(prev => ({ ...prev, image: value }));
+      if (value) setPreviewImages(prev => [value, ...prev.slice(1)]);
+    } else {
+      setAdditionalImages(value);
+      if (value) {
+        const urls = value.split("\n").filter(url => url.trim() !== "");
+        const validUrls = urls.filter(validateImageUrl);
+        if (validUrls.length !== urls.length) {
+          setImageError("Some image URLs are invalid. Please check the format.");
+        }
+        setPreviewImages([formData.image as string, ...validUrls]);
+      }
+    }
+  };
+
+  const removeImage = (index: number) => {
+    if (index === 0) {
+      setFormData(prev => ({ ...prev, image: "" }));
+    } else {
+      const newAdditionalImages = additionalImages
+        .split("\n")
+        .filter((_, i) => i !== index - 1)
+        .join("\n");
+      setAdditionalImages(newAdditionalImages);
+    }
+    setPreviewImages(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    setImageError(null);
 
     try {
       // Process features
@@ -118,33 +173,52 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
         .map((feature) => feature.trim())
         .filter((feature) => feature !== "");
 
-      // Process additional images
-      const imagesList = [formData.image as string];
-      if (additionalImages) {
-        const additionalImagesList = additionalImages
-          .split("\n")
-          .map((img) => img.trim())
-          .filter((img) => img !== "");
-        imagesList.push(...additionalImagesList);
+      // Validate all image URLs
+      const mainImage = formData.image as string;
+      const additionalImagesList = additionalImages
+        ? additionalImages
+            .split("\n")
+            .map((img) => img.trim())
+            .filter((img) => img !== "")
+        : [];
+
+      const allImages = [mainImage, ...additionalImagesList];
+      const invalidImages = allImages.filter(url => url && !validateImageUrl(url));
+
+      if (invalidImages.length > 0) {
+        setImageError("Some image URLs are invalid. Please check the format.");
+        setLoading(false);
+        return;
       }
 
       // Prepare data for API
       const propertyData = {
         ...formData,
         features: featuresList,
-        images: imagesList,
         agentEmail: selectedAgent || undefined,
       };
 
+      // Remove images from propertyData as we'll handle them separately
+      delete propertyData.images;
+
+      let savedProperty;
       if (property?.id) {
         // Update existing property
-        await updateProperty(property.id, propertyData);
+        savedProperty = await updateProperty(property.id, propertyData);
+        
+        // Update property images separately
+        if (savedProperty) {
+          await updatePropertyImages(property.id, allImages.filter(Boolean));
+        }
       } else {
-        // Create new property
-        await createProperty(propertyData);
+        // For new properties, include images in the initial creation
+        savedProperty = await createProperty({
+          ...propertyData,
+          images: allImages.filter(Boolean),
+        });
       }
 
-      if (onSuccess) {
+      if (onSuccess && savedProperty) {
         onSuccess();
       }
     } catch (err) {
@@ -313,29 +387,68 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
             </div>
           </div>
 
-          <div>
-            <Label htmlFor="image">Main Image URL</Label>
-            <Input
-              id="image"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              required
-              placeholder="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9"
-            />
-          </div>
+          <div className="space-y-4 col-span-2">
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Property Images</h3>
+              
+              <div>
+                <Label htmlFor="mainImage">Main Image URL</Label>
+                <Input
+                  id="mainImage"
+                  name="image"
+                  value={formData.image}
+                  onChange={(e) => handleImageChange(e, true)}
+                  placeholder="https://example.com/image.jpg"
+                />
+              </div>
 
-          <div>
-            <Label htmlFor="additionalImages">
-              Additional Images (One URL per line)
-            </Label>
-            <Textarea
-              id="additionalImages"
-              value={additionalImages}
-              onChange={(e) => setAdditionalImages(e.target.value)}
-              placeholder="https://images.unsplash.com/photo-1600210492493-0946911123ea\nhttps://images.unsplash.com/photo-1600607687939-ce8a6c25118c"
-              className="min-h-[100px]"
-            />
+              <div>
+                <Label htmlFor="additionalImages">Additional Image URLs (one per line)</Label>
+                <Textarea
+                  id="additionalImages"
+                  value={additionalImages}
+                  onChange={(e) => handleImageChange(e as any)}
+                  placeholder="https://example.com/image2.jpg&#10;https://example.com/image3.jpg"
+                  rows={4}
+                />
+              </div>
+
+              {imageError && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{imageError}</AlertDescription>
+                </Alert>
+              )}
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {previewImages.map((url, index) => (
+                  <Card key={`${url}-${index}`} className="relative group">
+                    <img
+                      src={url}
+                      alt={`Property image ${index + 1}`}
+                      className="w-full h-40 object-cover rounded-lg"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).src = "https://via.placeholder.com/400x300?text=Invalid+Image";
+                      }}
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="icon"
+                      className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={() => removeImage(index)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    {index === 0 && (
+                      <span className="absolute bottom-2 left-2 bg-black/50 text-white px-2 py-1 text-sm rounded">
+                        Main Image
+                      </span>
+                    )}
+                  </Card>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -364,20 +477,21 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
         />
       </div>
 
-      {error && <p className="text-red-500">{error}</p>}
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
-      <div className="flex justify-end space-x-4">
+      <div className="flex justify-end gap-4">
         {onCancel && (
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
         )}
         <Button type="submit" disabled={loading}>
-          {loading
-            ? "Saving..."
-            : property
-              ? "Update Property"
-              : "Add Property"}
+          {loading ? "Saving..." : property ? "Update Property" : "Create Property"}
         </Button>
       </div>
     </form>

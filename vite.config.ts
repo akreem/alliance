@@ -37,10 +37,12 @@ export default defineConfig({
     cors: true,
     proxy: {
       "/api": {
-        target: "http://srv708368.hstgr.cloud:8000",
+        target: "http://localhost:8000",
         changeOrigin: true,
         secure: false,
+        rewrite: (path) => path
       },
     },
+    port: 5173, // Frontend port
   },
 });
