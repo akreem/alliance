@@ -8,7 +8,6 @@ import {
   ChevronRight,
   Settings,
   Globe,
-  DollarSign,
 } from "lucide-react";
 import { isAuthenticated, getCurrentUser, logout } from "@/utils/auth";
 import AuthDialog from "../auth/AuthDialog";
@@ -168,116 +167,102 @@ const Navbar = ({
                 </a>
               ))}
 
-              {userAuthenticated ? (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <div className="flex items-center space-x-2 cursor-pointer bg-gray-800 dark:bg-gray-700 rounded-full p-1 pr-3">
-                      <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                        <User className="h-4 w-4" />
-                      </div>
-                      <span className="text-sm font-medium text-white">
-                        {username}
-                      </span>
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="end"
-                    className="w-56 dark:bg-gray-800"
-                  >
-                    <div className="flex items-center p-2">
-                      <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white mr-2">
-                        <User className="h-5 w-5" />
-                      </div>
-                      <div>
-                        <p className="font-medium dark:text-white">
+              <div className="flex items-center space-x-3">
+                <ThemeToggle />
+
+                {userAuthenticated ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <div className="flex items-center space-x-2 cursor-pointer bg-blue-600 dark:bg-blue-700 rounded-full p-1 pr-3 hover:bg-blue-700 dark:hover:bg-blue-800 transition-colors">
+                        <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-blue-600">
+                          <User className="h-4 w-4" />
+                        </div>
+                        <span className="text-sm font-medium text-white">
                           {username}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400">
-                          {getCurrentUser()?.email}
-                        </p>
-                      </div>
-                    </div>
-                    <DropdownMenuSeparator className="dark:border-gray-700" />
-                    <DropdownMenuItem className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700">
-                      <Globe className="mr-2 h-4 w-4" />
-                      <span>Langue</span>
-                      <div className="ml-auto flex items-center">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          Français
                         </span>
-                        <ChevronRight className="ml-1 h-4 w-4" />
                       </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700">
-                      <DollarSign className="mr-2 h-4 w-4" />
-                      <span>Devise</span>
-                      <div className="ml-auto flex items-center">
-                        <span className="text-xs text-gray-500 dark:text-gray-400">
-                          TND
-                        </span>
-                        <ChevronRight className="ml-1 h-4 w-4" />
-                      </div>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700">
-                      <div className="mr-2 h-4 w-4 flex items-center justify-center">
-                        <ThemeToggle showText={true} />
-                      </div>
-                      <span>Thème</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator className="dark:border-gray-700" />
-                    <DropdownMenuItem
-                      className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700"
-                      onClick={() => (window.location.href = "/account")}
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="end"
+                      className="w-56 dark:bg-gray-800"
                     >
-                      <User className="mr-2 h-4 w-4" />
-                      <span>Mon compte</span>
-                    </DropdownMenuItem>
-                    {getCurrentUser()?.isStaff && (
-                      <DropdownMenuItem
-                        className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700"
-                        onClick={() =>
-                          (window.location.href = "/admin/dashboard")
-                        }
-                      >
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Administration</span>
-                      </DropdownMenuItem>
-                    )}
-                    <DropdownMenuSeparator className="dark:border-gray-700" />
-                    <DropdownMenuItem
-                      className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700"
-                      onClick={handleLogout}
+                      <div className="flex items-center p-3 border-b dark:border-gray-700">
+                        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white mr-3">
+                          <User className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <p className="font-medium dark:text-white">
+                            {username}
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">
+                            {getCurrentUser()?.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="p-2">
+                        <DropdownMenuItem className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700 rounded-md">
+                          <Globe className="mr-2 h-4 w-4" />
+                          <span>Langue</span>
+                          <div className="ml-auto flex items-center">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              Français
+                            </span>
+                            <ChevronRight className="ml-1 h-4 w-4" />
+                          </div>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700 rounded-md"
+                          onClick={() => (window.location.href = "/account")}
+                        >
+                          <User className="mr-2 h-4 w-4" />
+                          <span>Mon compte</span>
+                        </DropdownMenuItem>
+                        {getCurrentUser()?.isStaff && (
+                          <DropdownMenuItem
+                            className="cursor-pointer dark:text-gray-200 dark:focus:bg-gray-700 rounded-md"
+                            onClick={() =>
+                              (window.location.href = "/admin/dashboard")
+                            }
+                          >
+                            <Settings className="mr-2 h-4 w-4" />
+                            <span>Administration</span>
+                          </DropdownMenuItem>
+                        )}
+                        <DropdownMenuItem
+                          className="cursor-pointer text-red-500 dark:text-red-400 dark:focus:bg-gray-700 rounded-md"
+                          onClick={handleLogout}
+                        >
+                          <LogOut className="mr-2 h-4 w-4" />
+                          <span>Déconnexion</span>
+                        </DropdownMenuItem>
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="default"
+                      className="rounded-full bg-blue-600 hover:bg-blue-700"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openLoginDialog();
+                      }}
                     >
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Déconnexion</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="default"
-                    className="rounded-full bg-blue-600 hover:bg-blue-700"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openLoginDialog();
-                    }}
-                  >
-                    Connexion
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-gray-800"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openSignupDialog();
-                    }}
-                  >
-                    Inscription
-                  </Button>
-                  <ThemeToggle />
-                </div>
-              )}
+                      Connexion
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-gray-800"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openSignupDialog();
+                      }}
+                    >
+                      Inscription
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Mobile Menu Button */}
@@ -294,7 +279,7 @@ const Navbar = ({
                     !isMobileMenuOpen &&
                     (window.location.pathname === "/" ||
                       window.location.pathname === "/about"),
-                  "text-gray-900":
+                  "text-gray-900 dark:text-white":
                     isScrolled ||
                     isMobileMenuOpen ||
                     (window.location.pathname !== "/" &&
@@ -311,55 +296,71 @@ const Navbar = ({
                 <a
                   key={index}
                   href={item.href}
-                  className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600"
+                  className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-gray-600 dark:hover:text-gray-300"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.label}
                 </a>
               ))}
 
-              {userAuthenticated ? (
-                <>
-                  <a
-                    href="/account"
-                    className="block py-2 text-gray-900 text-sm font-medium flex items-center"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    <User className="h-4 w-4 mr-1" /> {username}
-                  </a>
-                  <button
-                    onClick={handleLogout}
-                    className="block py-2 text-gray-900 text-sm font-medium hover:text-gray-600 w-full text-left flex items-center"
-                  >
-                    <LogOut className="h-4 w-4 mr-1" /> Déconnexion
-                  </button>
-                </>
-              ) : (
-                <div className="pt-2 flex flex-col space-y-2">
-                  <Button
-                    variant="default"
-                    className="rounded-full bg-blue-600 hover:bg-blue-700"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openLoginDialog();
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    Connexion
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      openSignupDialog();
-                      setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    Inscription
-                  </Button>
-                </div>
-              )}
+              <div className="flex items-center justify-between border-t dark:border-gray-700 pt-2 mt-2">
+                <ThemeToggle />
+                {userAuthenticated ? (
+                  <div className="flex flex-col space-y-2 w-full pl-4">
+                    <div className="flex items-center py-2 text-gray-900 dark:text-white text-sm font-medium">
+                      <User className="h-4 w-4 mr-2" />
+                      <span>{username}</span>
+                    </div>
+                    <a
+                      href="/account"
+                      className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      <Settings className="h-4 w-4 mr-2" /> Mon compte
+                    </a>
+                    {getCurrentUser()?.isStaff && (
+                      <a
+                        href="/admin/dashboard"
+                        className="block py-2 text-gray-900 dark:text-white text-sm font-medium hover:text-blue-600 dark:hover:text-blue-400 flex items-center"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                      >
+                        <Settings className="h-4 w-4 mr-2" /> Administration
+                      </a>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className="block py-2 text-red-500 text-sm font-medium hover:text-red-600 w-full text-left flex items-center"
+                    >
+                      <LogOut className="h-4 w-4 mr-2" /> Déconnexion
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-col space-y-2 w-full pl-4">
+                    <Button
+                      variant="default"
+                      className="rounded-full bg-blue-600 hover:bg-blue-700 w-full"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openLoginDialog();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Connexion
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="rounded-full border-blue-600 text-blue-600 hover:bg-blue-50 dark:border-blue-500 dark:text-blue-400 dark:hover:bg-gray-800 w-full"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        openSignupDialog();
+                        setIsMobileMenuOpen(false);
+                      }}
+                    >
+                      Inscription
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
