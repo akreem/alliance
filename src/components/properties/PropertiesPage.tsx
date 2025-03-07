@@ -7,7 +7,7 @@ import { Slider } from "../ui/slider";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import Navbar from "../navigation/Navbar";
-import PropertyMapSimple from "./PropertyMapSimple";
+import PropertyMap from "./PropertyMap";
 import { useProperties } from "./useProperties";
 import { Property } from "@/services/api";
 
@@ -201,7 +201,7 @@ const PropertiesPage = () => {
       </div>
 
       {/* Property Map Section */}
-      <PropertyMapSimple />
+      <PropertyMap />
     </div>
   );
 };
