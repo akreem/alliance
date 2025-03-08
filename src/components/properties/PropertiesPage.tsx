@@ -109,6 +109,15 @@ const PropertiesPage = () => {
     console.log("Filters reset");
   };
 
+  // Format price for display
+  const formatPrice = (price: number) => {
+    if (price >= 1000000) {
+      return `${(price / 1000000).toFixed(1)}M TND`;
+    } else {
+      return `${(price / 1000).toFixed(0)}K TND`;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
       <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
@@ -155,7 +164,12 @@ const PropertiesPage = () => {
 
             {/* Price Range */}
             <div>
-              <Label className="mb-2 block">Fourchette de prix</Label>
+              <div className="flex justify-between items-center mb-2">
+                <Label>Fourchette de prix</Label>
+                <span className="text-sm text-primary font-medium">
+                  {formatPrice(priceRange[0])} - {formatPrice(priceRange[1])}
+                </span>
+              </div>
               <div className="pt-4">
                 <Slider
                   defaultValue={[0, 1000000]}
@@ -164,11 +178,12 @@ const PropertiesPage = () => {
                   step={10000}
                   value={priceRange}
                   onValueChange={setPriceRange}
+                  className="my-4"
                 />
               </div>
-              <div className="flex justify-between mt-2 text-sm text-gray-500">
-                <span>{(priceRange[0] / 1000).toFixed(0)}K TND</span>
-                <span>{(priceRange[1] / 1000).toFixed(0)}K TND</span>
+              <div className="flex justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
+                <span>0 TND</span>
+                <span>1M TND</span>
               </div>
             </div>
 

@@ -247,7 +247,10 @@ const Navbar = ({
                     <Button
                       variant={!isScrolled && window.location.pathname === "/" ? "default" : "outline"}
                       size="sm"
-                      onClick={openLoginDialog}
+                      onClick={() => {
+                        setAuthDialogTab("login");
+                        setAuthDialogOpen(true);
+                      }}
                       className={cn({
                         "bg-blue-600 hover:bg-blue-700 text-white border-transparent":
                           !isScrolled && window.location.pathname === "/",
@@ -255,7 +258,13 @@ const Navbar = ({
                     >
                       Connexion
                     </Button>
-                    <Button size="sm" onClick={openSignupDialog}>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        setAuthDialogTab("signup");
+                        setAuthDialogOpen(true);
+                      }}
+                    >
                       Inscription
                     </Button>
                   </div>
@@ -335,8 +344,9 @@ const Navbar = ({
                         variant="outline"
                         size="sm"
                         onClick={() => {
+                          setAuthDialogTab("login");
                           setIsMobileMenuOpen(false);
-                          openLoginDialog();
+                          setAuthDialogOpen(true);
                         }}
                       >
                         Connexion
@@ -344,8 +354,9 @@ const Navbar = ({
                       <Button
                         size="sm"
                         onClick={() => {
+                          setAuthDialogTab("signup");
                           setIsMobileMenuOpen(false);
-                          openSignupDialog();
+                          setAuthDialogOpen(true);
                         }}
                       >
                         Inscription

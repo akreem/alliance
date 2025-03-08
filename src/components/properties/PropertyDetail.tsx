@@ -11,6 +11,7 @@ import {
   Share2,
   Phone,
   Mail,
+  Maximize2,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import Navbar from "../navigation/Navbar";
@@ -18,11 +19,18 @@ import { Badge } from "../ui/badge";
 import { usePropertyDetail } from "./usePropertyDetail";
 import { getProperties, getProperty } from "@/services/api";
 import { Property } from "@/services/api";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const PropertyDetail = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
   const passedPropertyData = location.state?.propertyData;
+  const [mapDialogOpen, setMapDialogOpen] = React.useState(false);
+  const mapContainerRef = React.useRef<HTMLDivElement>(null);
+  const mapRef = React.useRef<mapboxgl.Map | null>(null);
+  const markerRef = React.useRef<mapboxgl.Marker | null>(null);
 
   // If we have property data passed via Link state, use it to initialize
   React.useEffect(() => {
@@ -66,6 +74,91 @@ const PropertyDetail = () => {
     }
   }, [id]);
 
+  // Initialize map when dialog opens
+  React.useEffect(() => {
+    if (mapDialogOpen && property && mapContainerRef.current) {
+      // Clear any existing map
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+      
+      mapboxgl.accessToken = "pk.eyJ1IjoiYWtyZWVtIiwiYSI6ImNtN2JzdHg2ZTBlaTAyaXNkcXBvNTFodGoifQ.sbagCNf1jYtllBjqAdiHUQ";
+      
+      // Ensure we have valid coordinates
+      const lat = property.lat !== undefined && property.lat !== null ? Number(property.lat) : 36.8065;
+      const lng = property.lng !== undefined && property.lng !== null ? Number(property.lng) : 10.1815;
+      
+      console.log(`PropertyDetail: Creating map with coordinates [${lng}, ${lat}]`);
+      
+      // Create a new map instance
+      const newMap = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: "mapbox://styles/akreem/cm7btkdgr006t01qyevls98b5",
+        center: [lng, lat],
+        zoom: 15,
+        locale: "fr",
+      });
+      
+      // Store the map reference
+      mapRef.current = newMap;
+      
+      // Add navigation controls
+      newMap.addControl(new mapboxgl.NavigationControl(), "top-right");
+      
+      // Wait for map to load before adding marker
+      newMap.on('load', () => {
+        console.log(`PropertyDetail: Map loaded, adding marker at [${lng}, ${lat}]`);
+        
+        // Create custom HTML element for the marker
+        const markerEl = document.createElement("div");
+        markerEl.className = "custom-marker";
+        markerEl.innerHTML = `<div class="marker-pin"></div>`;
+        
+        // Add a blue marker
+        const marker = new mapboxgl.Marker(markerEl)
+          .setLngLat([lng, lat])
+          .addTo(newMap);
+        
+        // Store marker reference
+        markerRef.current = marker;
+        
+        // Create popup with property info
+        const popup = new mapboxgl.Popup({
+          offset: 25,
+          closeButton: true,
+          closeOnClick: false,
+          maxWidth: '300px'
+        })
+          .setLngLat([lng, lat])
+          .setHTML(`
+            <div class="p-3 min-w-[220px]" dir="rtl">
+              <div class="mb-2 rounded-md overflow-hidden">
+                <img src="${property.images?.[0] || property.image}" 
+                     alt="${property.title}" class="w-full h-32 object-cover">
+              </div>
+              <div class="text-right">
+                <h3 class="font-semibold text-sm mb-1">${property.title}</h3>
+                <p class="text-xs text-gray-600 mb-1">${property.location}</p>
+                <p class="text-xs font-bold text-primary">${property.price}</p>
+                <p class="text-xs text-gray-500 mt-1">${property.type}</p>
+              </div>
+            </div>
+          `)
+          .addTo(newMap);
+      });
+    }
+    
+    // Cleanup map when dialog closes
+    return () => {
+      if (!mapDialogOpen && mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+        markerRef.current = null;
+      }
+    };
+  }, [mapDialogOpen, property]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background text-foreground">
@@ -86,7 +179,7 @@ const PropertyDetail = () => {
             {error || "Property Not Found"}
           </h2>
           <Link to="/properties" className="text-primary hover:underline">
-            Return to Properties
+            Retour aux Propriétés
           </Link>
         </div>
       </div>
@@ -107,7 +200,7 @@ const PropertyDetail = () => {
               className="inline-flex items-center text-muted-foreground hover:text-primary transition-colors"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Properties
+              Retour aux Propriétés
             </Link>
           </div>
 
@@ -213,7 +306,33 @@ const PropertyDetail = () => {
             </div>
 
             <div className="bg-card text-card-foreground rounded-lg shadow-md p-8">
-              <h2 className="text-xl font-semibold mb-6">Location</h2>
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold">Location</h2>
+                <Dialog open={mapDialogOpen} onOpenChange={setMapDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center gap-2"
+                    >
+                      <Maximize2 className="h-4 w-4" />
+                      <span>View Full Map</span>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[900px] p-0">
+                    <DialogHeader className="p-6 pb-0">
+                      <DialogTitle>Property Location</DialogTitle>
+                    </DialogHeader>
+                    <div className="p-6 pt-2">
+                      <div ref={mapContainerRef} className="w-full h-[600px] rounded-lg overflow-hidden"></div>
+                      <div className="mt-4 text-sm text-muted-foreground">
+                        <p>Coordonnées: {property.lat ? `${property.lat.toFixed(6)}, ${property.lng?.toFixed(6)}` : "Coordonnées non disponibles"}</p>
+                        <p className="mt-2">{property.location}</p>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
               <div className="h-[400px] rounded-lg overflow-hidden">
                 <iframe
                   src={`https://api.mapbox.com/styles/v1/akreem/cm7btkdgr006t01qyevls98b5.html?title=false&access_token=pk.eyJ1IjoiYWtyZWVtIiwiYSI6ImNtN2JzdHg2ZTBlaTAyaXNkcXBvNTFodGoifQ.sbagCNf1jYtllBjqAdiHUQ&zoomwheel=true#15/${property.lat || 36.8702}/${property.lng || 10.3417}`}
@@ -351,6 +470,62 @@ const PropertyDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Custom marker styles */}
+      <style jsx>{`
+        .mapboxgl-popup {
+          z-index: 10;
+        }
+        .mapboxgl-popup-content {
+          padding: 0;
+          border-radius: 8px;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          font-family: "Arial", sans-serif;
+        }
+        .mapboxgl-popup-content a {
+          font-family: "Arial", sans-serif;
+        }
+        .custom-marker {
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+        .custom-marker:hover {
+          transform: scale(1.2);
+        }
+        .marker-pin {
+          width: 30px;
+          height: 30px;
+          border-radius: 50% 50% 50% 0;
+          background: #222d65;
+          position: absolute;
+          transform: rotate(-45deg);
+          left: 50%;
+          top: 50%;
+          margin: -15px 0 0 -15px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+          animation: pulse 2s infinite;
+        }
+        .marker-pin::after {
+          content: "";
+          width: 18px;
+          height: 18px;
+          margin: 6px 0 0 6px;
+          background: white;
+          position: absolute;
+          border-radius: 50%;
+        }
+        @keyframes pulse {
+          0% {
+            box-shadow: 0 0 0 0 rgba(34, 45, 101, 0.7);
+          }
+          70% {
+            box-shadow: 0 0 0 10px rgba(34, 45, 101, 0);
+          }
+          100% {
+            box-shadow: 0 0 0 0 rgba(34, 45, 101, 0);
+          }
+        }
+      `}</style>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import LoginForm from "./LoginForm";
@@ -8,19 +8,40 @@ interface AuthDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   defaultTab?: "login" | "signup";
+  onSuccess?: () => void;
 }
 
 const AuthDialog = ({
   open,
   onOpenChange,
   defaultTab = "login",
+  onSuccess,
 }: AuthDialogProps) => {
   const [activeTab, setActiveTab] = useState<"login" | "signup">(defaultTab);
+  
+  // Update activeTab when defaultTab prop changes
+  useEffect(() => {
+    if (defaultTab) {
+      setActiveTab(defaultTab);
+    }
+  }, [defaultTab]);
+
+  // Update activeTab when dialog opens
+  useEffect(() => {
+    if (open && defaultTab) {
+      setActiveTab(defaultTab);
+    }
+  }, [open, defaultTab]);
 
   const handleSuccess = () => {
     onOpenChange(false);
-    // Force a page refresh to update the navbar
-    window.location.reload();
+    // Call the onSuccess callback if provided
+    if (onSuccess) {
+      onSuccess();
+    } else {
+      // Otherwise, force a page refresh to update the navbar
+      window.location.reload();
+    }
   };
 
   return (
@@ -32,7 +53,7 @@ const AuthDialog = ({
           </DialogTitle>
         </DialogHeader>
         <Tabs
-          defaultValue={defaultTab}
+          defaultValue={activeTab}
           value={activeTab}
           onValueChange={(value) => setActiveTab(value as "login" | "signup")}
           className="w-full"

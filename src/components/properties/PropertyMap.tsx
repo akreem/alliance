@@ -81,8 +81,8 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
         id: p.id,
         name: p.title,
         location: p.location,
-        lat: p.lat || 36.8065, // Default to Tunis if no coordinates
-        lng: p.lng || 10.1815,
+        lat: p.lat !== undefined && p.lat !== null ? Number(p.lat) : 36.8065,
+        lng: p.lng !== undefined && p.lng !== null ? Number(p.lng) : 10.1815,
         price: p.price,
         type: p.type || "Property",
         image: p.image
@@ -92,8 +92,8 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
           id: p.id,
           name: p.title,
           location: p.location,
-          lat: p.lat || 36.8065, // Default to Tunis if no coordinates
-          lng: p.lng || 10.1815,
+          lat: p.lat !== undefined && p.lat !== null ? Number(p.lat) : 36.8065,
+          lng: p.lng !== undefined && p.lng !== null ? Number(p.lng) : 10.1815,
           price: p.price,
           type: p.type || "Property",
           image: p.image
@@ -120,8 +120,22 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
     // Clear existing markers first
     clearMarkers();
     
+    // Log locations for debugging
+    console.log("Adding markers for locations:", locations);
+    
     // Add new markers
     locations.forEach((location) => {
+      // Validate coordinates and ensure they are numbers
+      const lat = location.lat !== undefined && location.lat !== null ? Number(location.lat) : null;
+      const lng = location.lng !== undefined && location.lng !== null ? Number(location.lng) : null;
+      
+      if (lat === null || lng === null || isNaN(lat) || isNaN(lng)) {
+        console.warn(`Invalid coordinates for property ${location.id}: lat=${location.lat}, lng=${location.lng}`);
+        return;
+      }
+      
+      console.log(`Adding marker for property ${location.id} at [${lng}, ${lat}]`);
+      
       // Create custom HTML element for the marker
       const markerEl = document.createElement("div");
       markerEl.className = "custom-marker";
@@ -138,7 +152,7 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
           
           // Zoom to the location with animation
           map.current.flyTo({
-            center: [location.lng, location.lat],
+            center: [lng, lat],
             zoom: 16,
             speed: 1.2,
             essential: true,
@@ -167,12 +181,12 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
         closeOnClick: false,
         className: 'property-popup'
       }).setHTML(`
-          <div class="p-3 min-w-[220px]">
+          <div class="p-3 min-w-[220px]" dir="rtl">
             <div class="mb-2 rounded-md overflow-hidden">
               <img src="${imageUrl}" 
                    alt="${location.name}" class="w-full h-32 object-cover">
             </div>
-            <div style="text-align: right; direction: rtl;">
+            <div class="text-right">
               <h3 class="font-semibold text-sm mb-1">${location.name}</h3>
               <p class="text-xs text-gray-600 mb-1">${location.location}</p>
               <p class="text-xs font-bold text-primary">${location.price}</p>
@@ -187,7 +201,7 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
 
       // Create marker
       const marker = new mapboxgl.Marker(markerEl)
-        .setLngLat([location.lng, location.lat])
+        .setLngLat([lng, lat])
         .setPopup(popup)
         .addTo(map.current!);
       
@@ -238,10 +252,31 @@ const PropertyMap = ({ locations = defaultLocations, properties = [] }: Property
     mapboxgl.accessToken =
       "pk.eyJ1IjoiYWtyZWVtIiwiYSI6ImNtN2JzdHg2ZTBlaTAyaXNkcXBvNTFodGoifQ.sbagCNf1jYtllBjqAdiHUQ";
 
+    // Calculate center based on available properties
+    let centerLng = 10.1815; // Default to Tunis
+    let centerLat = 36.8065;
+    
+    if (propertyLocations.length > 0) {
+      // Find valid coordinates
+      const validLocations = propertyLocations.filter(loc => 
+        typeof loc.lat === 'number' && typeof loc.lng === 'number' && 
+        !isNaN(loc.lat) && !isNaN(loc.lng));
+      
+      if (validLocations.length > 0) {
+        // Calculate average coordinates
+        const sumLat = validLocations.reduce((sum, loc) => sum + loc.lat, 0);
+        const sumLng = validLocations.reduce((sum, loc) => sum + loc.lng, 0);
+        centerLat = sumLat / validLocations.length;
+        centerLng = sumLng / validLocations.length;
+      }
+    }
+    
+    console.log(`Initializing map with center: [${centerLng}, ${centerLat}]`);
+
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/akreem/cm7btkdgr006t01qyevls98b5",
-      center: [10.1815, 36.8065], // center on Tunis
+      center: [centerLng, centerLat],
       zoom: 9, // Adjust zoom level to be closer
       locale: "fr", // Use French locale which is closer to Arabic for Tunisia
     });
