@@ -33,7 +33,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt  # For SSL certificates
     environment:
       - NODE_ENV=production
-      - VITE_API_URL=/api  # Use a relative URL in production
+      - VITE_API_URL=http://api:8000/api  # Direct access to API service within Docker network
     depends_on:
       - api
 

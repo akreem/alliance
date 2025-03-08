@@ -1,7 +1,24 @@
-// Use a dynamic approach to determine the API URL
-// This will work with any domain, just changing the port to 8000
-const API_BASE = window.location.protocol + '//' + window.location.hostname + ':8000';
-const API_URL = `${API_BASE}/api`;
+// Use environment variables or fallback to dynamic URL construction
+const getApiUrl = () => {
+  // If VITE_API_URL is defined, use it (this will be set in docker-compose.yml)
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  
+  // Fallback to dynamic approach for development
+  const protocol = window.location.protocol;
+  const hostname = window.location.hostname;
+  
+  // In production Docker environment, the API is accessible via the service name
+  if (process.env.NODE_ENV === 'production') {
+    return `${protocol}//${hostname}/api`;
+  }
+  
+  // For local development
+  return `${protocol}//${hostname}:8000/api`;
+};
+
+const API_URL = getApiUrl();
 
 console.log('API URL configured as:', API_URL);
 
