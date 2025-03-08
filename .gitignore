@@ -7,6 +7,14 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+api/users/migrations/__pycache__/
+api/users/__pycache__/
+api/realestate/__pycache__/
+api/properties/migrations/__pycache__/
+api/properties/__pycache__/
+
+
+
 node_modules
 dist
 dist-ssr

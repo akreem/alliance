@@ -20,19 +20,22 @@ services:
       - api
 
   # Production service
-  # prod:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./certbot-ssl:/var/www/certbot  # For temporary ACME challenges
-  #     - /etc/letsencrypt:/etc/letsencrypt  # For SSL certificates
-  #   depends_on:
-  #     - api
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - ./certbot-ssl:/var/www/certbot  # For temporary ACME challenges
+      - /etc/letsencrypt:/etc/letsencrypt  # For SSL certificates
+    environment:
+      - NODE_ENV=production
+      - VITE_API_URL=/api  # Use a relative URL in production
+    depends_on:
+      - api
 
   # API service
   api:
@@ -43,6 +46,7 @@ services:
       - "8000:8000"
     volumes:
       - ./api:/app
+      - ./api/staticfiles:/app/staticfiles
     environment:
       - DJANGO_DEBUG=true
       - DJANGO_SETTINGS_MODULE=realestate.settings
