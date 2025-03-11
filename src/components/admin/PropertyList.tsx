@@ -94,9 +94,9 @@ const PropertyList = () => {
     <Card>
       <CardContent className="p-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-2xl font-bold">Properties</h2>
+          <h2 className="text-2xl font-bold">Propriétés</h2>
           <Button onClick={() => { setSelectedProperty(null); setEditDialogOpen(true); }}>
-            Add Property
+          Ajouter une propriété
           </Button>
         </div>
 
