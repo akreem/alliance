@@ -7,10 +7,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-api/users/migrations/__pycache__/
+api/users/migrations/
 api/users/__pycache__/
 api/realestate/__pycache__/
-api/properties/migrations/__pycache__/
+api/properties/migrations/
 api/properties/__pycache__/
 
 
