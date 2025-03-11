@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # Development service
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_TEMPO=true
+      - VITE_API_URL=http://localhost:8000/api
+    command: npm run dev -- --host
+    depends_on:
+      - api
+
+  # Production service
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - ./certbot-ssl:/var/www/certbot  # For temporary ACME challenges
+      - /etc/letsencrypt:/etc/letsencrypt  # For SSL certificates
+    depends_on:
+
+      - api
+
+  # API service
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./api:/app
+    environment:
+      - DJANGO_DEBUG=true
+      - DJANGO_SETTINGS_MODULE=realestate.settings
+    command: python manage.py runserver 0.0.0.0:8000
+    depends_on:
+      - db
+
+  # Database service
+  db:
+    image: postgres:14
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=realestatedb
+
+#volumes:
+  #postgres_data:
+
+networks:
+  default:
+    driver: bridge

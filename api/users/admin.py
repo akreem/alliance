@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import gettext_lazy as _
 
 from .models import User
+from properties.models import Property
 
 class UserAdmin(BaseUserAdmin):
     list_display = ('username', 'email', 'is_staff', 'is_active', 'created_at')
@@ -27,3 +28,4 @@ class UserAdmin(BaseUserAdmin):
 
 # Register the User model with the admin site
 admin.site.register(User, UserAdmin)
+admin.site.register(Property)
