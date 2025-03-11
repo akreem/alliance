@@ -11,23 +11,25 @@ def get_image_path(instance, filename):
 
 class Property(models.Model):
     PROPERTY_TYPES = [
+        ('Terrain', 'Terrain'),
+        ('Appartement', 'Appartement'), 
         ('Villa', 'Villa'),
-        ('Apartment', 'Apartment'),
-        ('House', 'House'),
-        ('Condo', 'Condo'),
-        ('Estate', 'Estate'),
-        ('Land', 'Land'),
+        ('Maison', 'Maison'),
+        ('Résidence', 'Résidence'),         
     ]
     
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
-    price = models.CharField(max_length=50)
     price_value = models.IntegerField()
-    location = models.CharField(max_length=255)
-    beds = models.IntegerField()
-    baths = models.IntegerField()
-    sqft = models.IntegerField()
-    type = models.CharField(max_length=50, choices=PROPERTY_TYPES)
+    lat = models.FloatField(null=True, blank=True)
+    lng = models.FloatField(null=True, blank=True)
+    location = models.CharField(max_length=255, blank=True, null=True)
+    rooms = models.IntegerField(blank=True, null=True)
+    baths = models.IntegerField(blank=True, null=True)
+    surface = models.FloatField(blank=True, null=True)
+    dimensions = models.CharField(max_length=255, blank=True, null=True)
+    sqft = models.IntegerField(blank=True, null=True)
+    property_type = models.CharField(max_length=50, choices=PROPERTY_TYPES)
     description = models.TextField(blank=True, null=True)
     lat = models.FloatField(null=True, blank=True)
     lng = models.FloatField(null=True, blank=True)
@@ -41,10 +43,22 @@ class Property(models.Model):
     
     def __str__(self):
         return self.title
-    
+
+    def clean(self):
+        # Validation based on property type
+        if self.property_type == 'Terrain':
+            if not self.surface :
+                raise ValidationError('Surface is required for Terrain properties.')
+            if self.rooms or self.baths:
+                raise ValidationError('rooms and baths should not be set for Terrain properties.')
+        else:
+            if self.property_type in ['Appartement', 'Villa', 'Maison'] and (not self.rooms or not self.baths):
+                raise ValidationError('rooms and baths are required for house or apartment properties.')
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
+        self.full_clean()  # Ensure validation runs on save
         super().save(*args, **kwargs)
 
 class PropertyFeature(models.Model):

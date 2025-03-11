@@ -229,14 +229,14 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
     }
   };
 
-  const propertyTypes = ["Villa", "Apartment", "House", "Condo", "Estate"];
+  const propertyTypes = ["Terrain", "Apartment", "Villa", "Maison", "Résidence"];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-4">
           <div>
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">Titre</Label>
             <Input
               id="title"
               name="title"
@@ -248,50 +248,13 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
           </div>
 
           <div>
-            <Label htmlFor="price">Price (Display Format)</Label>
-            <Input
-              id="price"
-              name="price"
-              value={formData.price}
-              onChange={handleChange}
-              required
-              placeholder="1,200,000 TND"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="priceValue">Price Value (Numeric)</Label>
-            <Input
-              id="priceValue"
-              name="priceValue"
-              type="number"
-              value={formData.priceValue}
-              onChange={handleChange}
-              required
-              placeholder="1200000"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="location">Location</Label>
-            <Input
-              id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              required
-              placeholder="Sidi Bou Said, Tunis"
-            />
-          </div>
-
-          <div>
-            <Label htmlFor="type">Property Type</Label>
+            <Label htmlFor="type">Type de propriété</Label>
             <Select
               value={formData.type}
               onValueChange={(value) => handleSelectChange("type", value)}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select property type" />
+                <SelectValue placeholder="Sélectionner le type de propriété" />
               </SelectTrigger>
               <SelectContent>
                 {propertyTypes.map((type) => (
@@ -304,6 +267,33 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
           </div>
 
           <div>
+            <Label htmlFor="priceValue">Prix ​​(numérique)</Label>
+            <Input
+              id="priceValue"
+              name="priceValue"
+              type="number"
+              value={formData.priceValue}
+              onChange={handleChange}
+              required
+              placeholder="1200000"
+            />
+          </div>
+
+          <div>
+            <Label htmlFor="location">Emplacement</Label>
+            <Input
+              id="location"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              required
+              placeholder="Sidi Bou Said, Tunis"
+            />
+          </div>
+
+          
+
+          {/* <div>
             <Label htmlFor="agent">Assign Agent</Label>
             <Select value={selectedAgent} onValueChange={setSelectedAgent}>
               <SelectTrigger>
@@ -317,13 +307,13 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </div> */}
         </div>
 
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="beds">Beds</Label>
+              <Label htmlFor="beds">Chambres</Label>
               <Input
                 id="beds"
                 name="beds"
@@ -335,7 +325,7 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
               />
             </div>
             <div>
-              <Label htmlFor="baths">Baths</Label>
+              <Label htmlFor="baths">Salles de bains</Label>
               <Input
                 id="baths"
                 name="baths"
@@ -347,7 +337,7 @@ const PropertyForm = ({ property, onSuccess, onCancel }: PropertyFormProps) => {
               />
             </div>
             <div>
-              <Label htmlFor="sqft">Square Feet</Label>
+              <Label htmlFor="sqft">Surface</Label>
               <Input
                 id="sqft"
                 name="sqft"

@@ -107,7 +107,7 @@ const ContactPage = () => {
                     E-mail
                   </h3>
                   <span className="text-gray-600 dark:text-gray-300">
-                    contact@allianceimmobilier.tn
+                    contact@allianceimmo.tech
                   </span>
                 </div>
               </div>
@@ -119,7 +119,7 @@ const ContactPage = () => {
               </h3>
               <div className="flex space-x-6">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/allianceimo"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-gray-100 dark:bg-gray-700 p-4 rounded-full hover:bg-primary/10 transition-colors"
